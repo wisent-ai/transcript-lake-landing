@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Operator runbook — Transcript Lake</title>
+  <meta name="description" content="Preserve evidence before intervention. Never edit vendor transcripts, partitions, or cursors in place. Use transcript-lake paths, sources, doctor, and status --json to identify the selected root and failure domain.">
+  <meta name="theme-color" content="#07121a">
+  <meta property="og:title" content="Operator runbook — Transcript Lake">
+  <meta property="og:description" content="Preserve evidence before intervention. Never edit vendor transcripts, partitions, or cursors in place. Use transcript-lake paths, sources, doctor, and status --json to identify the selected root and failure domain.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://transcript-lake.wisent.com/docs/runbook/">
+  <link rel="canonical" href="https://transcript-lake.wisent.com/docs/runbook/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="ambient" aria-hidden="true"></div>
+  <div class="docs-shell">
+<header class="site-header">
+  <a class="brand" href="/" aria-label="Transcript Lake home"><span class="brand-mark" aria-hidden="true"><span>T</span>L</span><span class="brand-name">Transcript Lake</span></a>
+  <nav class="top-nav" aria-label="Primary navigation">
+    <a href="/docs/">Documentation</a>
+    <a href="https://github.com/wisent-ai/transcript-lake" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</header>
+<button class="docs-menu-button" type="button" aria-controls="docs-nav" aria-expanded="false">Browse topics</button>
+<div class="docs-layout">
+  <div id="docs-nav"><nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home-link" href="/docs/">Documentation home</a><section class="nav-group"><h2>Start here</h2><a href="/docs/what-is-transcript-lake/">What is Transcript Lake?</a><a href="/docs/quick-start/">Quick start: a synthetic local Lake</a><a href="/docs/onboarding/">Onboarding</a><a href="/docs/configuration/">Configuration reference</a></section><section class="nav-group"><h2>Understand</h2><a href="/docs/architecture/">Architecture</a><a href="/docs/core/">Core functionality contract</a><a href="/docs/lake/">Transcript Lake</a><a href="/docs/ingestion-reference/">Ingestion pipeline reference</a><a href="/docs/masking-guarantees/">Masking guarantees and limits</a></section><section class="nav-group"><h2>Concepts</h2><a href="/docs/concepts/cursor/">Concept: cursor and writer lease</a><a href="/docs/concepts/event/">Concept: canonical event</a><a href="/docs/concepts/export/">Concept: export and derived data</a><a href="/docs/concepts/label/">Concept: label</a><a href="/docs/concepts/masking/">Concept: masking</a><a href="/docs/concepts/partition/">Concept: partition</a><a href="/docs/concepts/runtime/">Concept: runtime and adapter</a><a href="/docs/concepts/session/">Concept: session</a></section><section class="nav-group"><h2>Operate</h2><a href="/docs/cli-reference/">CLI reference</a><a href="/docs/runbook/" aria-current="page" class="active">Operator runbook</a><a href="/docs/integrations/">Integration contracts</a><a href="/docs/releases/">Release and versioning policy</a><a href="/docs/walkthrough-live-append/">Walkthrough: catch up and commit a synthetic live append</a><a href="/docs/walkthrough-masking-audit/">Walkthrough: audit synthetic masking and derived output</a></section><section class="nav-group"><h2>Examples</h2><a href="/docs/examples/">Transcript Lake examples</a><a href="/docs/examples/core/cli-tour/">CLI tour</a><a href="/docs/examples/core/inspect-zero-state/">Inspect zero state and product identity</a><a href="/docs/examples/core/live-stream/">Keep a Lake current with the live stream</a><a href="/docs/examples/core/query-sessions/">Query cross-runtime sessions</a><a href="/docs/examples/core/restore-a-conversation/">Restore one conversation</a><a href="/docs/examples/failures/representative-failures/">Diagnose representative failures</a><a href="/docs/examples/getting-started/first-local-archive/">Create the first local archive</a><a href="/docs/examples/integrations/duckdb/cross-source-signals/">Query cross-source signals with Oko</a><a href="/docs/examples/integrations/oko/rebuild-oko/">Reconstruct the Oko projection</a><a href="/docs/examples/integrations/oko/reindex-oko/">Reindex Oko after projection changes</a><a href="/docs/examples/integrations/tama/import-hook-decisions/">Stream Tama hook decisions</a><a href="/docs/examples/operations/build-release-assets/">Build release assets</a><a href="/docs/examples/operations/compact-to-parquet/">Compact partitions to Parquet</a><a href="/docs/examples/operations/reset-and-uninstall/">Reset local state and uninstall</a><a href="/docs/examples/operations/upgrade-and-rollback/">Upgrade and roll back an exact release</a><a href="/docs/examples/recovery/rebuild-into-empty-root/">Rebuild into an empty root</a><a href="/docs/examples/synthetic/live-append/">Synthetic example: live append</a><a href="/docs/examples/synthetic/masking-audit/">Synthetic example: masking audit</a></section></nav></div>
+  <main class="docs-main" id="main">
+    <div class="article-layout">
+      <article class="doc-article">
+        <header class="article-header"><p class="eyebrow">Documentation / Operate</p><h1>Operator runbook</h1><p>Preserve evidence before intervention. Never edit vendor transcripts, partitions, or cursors in place. Use transcript-lake paths, sources, doctor, and status --json to identify the selected root and failure domain.</p></header>
+        <div class="article-content"><p>Preserve evidence before intervention. Never edit vendor transcripts, partitions, or cursors in place. Use <code>transcript-lake paths</code>, <code>sources</code>, <code>doctor</code>, and <code>status --json</code> to identify the selected root and failure domain.</p>
+<h2 id="no-supported-roots">No supported roots<a class="heading-anchor" href="#no-supported-roots" aria-label="Link to No supported roots">#</a></h2>
+<p><strong>Message:</strong> <code>stream found no supported source roots on this machine</code></p>
+<p>Run <code>sources</code>. Start at least one supported runtime as the same user or correct <code>HOME</code>. For Tama, verify <code>HOOKS_ADAPTIVE_SEGMENTS_READY</code>. Do not create fake directories in a production home merely to silence the refusal.</p>
+<h2 id="writer-lease-is-held">Writer lease is held<a class="heading-anchor" href="#writer-lease-is-held" aria-label="Link to Writer lease is held">#</a></h2>
+<p><strong>Message:</strong> <code>state writer lock is held by &lt;host&gt; pid &lt;pid&gt;</code></p>
+<p>Run <code>status</code>; check the supervisor/service for the reported process. If it is alive, let that one stream own the root and stop the duplicate. Do not delete <code>stream.lock</code> for a live owner. The lease code automatically reclaims a provably dead owner after host/pid/start checks. If process identity cannot be established, preserve the root and escalate rather than forcing mutation.</p>
+<h2 id="cursor-store-is-unreadable-or-corrupt">Cursor store is unreadable or corrupt<a class="heading-anchor" href="#cursor-store-is-unreadable-or-corrupt" aria-label="Link to Cursor store is unreadable or corrupt">#</a></h2>
+<p><strong>Messages:</strong></p>
+<ul><li><code>cursor store is unreadable; preserve it and recover into an empty LAKE_DATA: &lt;error&gt;</code></li><li><code>cursor store is corrupt; preserve it and recover into an empty LAKE_DATA: &lt;error&gt;</code></li><li><code>cursor store must be a JSON object; preserve it and recover into an empty LAKE_DATA</code></li><li><code>cursor record contains invalid numeric state</code></li></ul>
+<p>Stop the writer. Preserve the complete Lake and cursor file. Do not reset <code>cursors.json</code> beside existing partitions: replay could duplicate evidence. Choose a different empty destination and run:</p>
+<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake rebuild --to &quot;$HOME/.transcript-lake-rebuild&quot;
+transcript-lake --data-dir &quot;$HOME/.transcript-lake-rebuild&quot; doctor
+transcript-lake --data-dir &quot;$HOME/.transcript-lake-rebuild&quot; status</code></pre></div>
+<p>Switch consumers only after inspecting the new root. Retain the old root until the operator approves disposal.</p>
+<h2 id="source-shrank-or-changed-without-an-append">Source shrank or changed without an append<a class="heading-anchor" href="#source-shrank-or-changed-without-an-append" aria-label="Link to Source shrank or changed without an append">#</a></h2>
+<p><strong>Messages:</strong></p>
+<ul><li><code>source shrank after its last checkpoint; preserve the Lake and use rebuild</code></li><li><code>source changed without an append; preserve the Lake and use rebuild</code></li></ul>
+<p>A vendor rotated, truncated, or rewrote a tracked file. Preserve both vendor source and Lake. Rebuild to a different empty root. Optional <code>--source &lt;runtime&gt;</code> narrows replay only when the operator has established that other runtimes are unaffected.</p>
+<p>Related guardrails:</p>
+<ul><li><code>rebuild requires --to &lt;empty-path&gt;</code></li><li><code>rebuild target must differ from the current Lake</code></li><li><code>rebuild requires an empty LAKE_DATA root so replay cannot duplicate or erase existing evidence</code></li></ul>
+<h2 id="stream-watcher-failures">Stream watcher failures<a class="heading-anchor" href="#stream-watcher-failures" aria-label="Link to Stream watcher failures">#</a></h2>
+<p><strong>Messages:</strong></p>
+<ul><li><code>stream could not start: &lt;error&gt;</code></li><li><code>stream could not watch &lt;path&gt;: &lt;error&gt;</code></li><li><code>stat failed for &lt;path&gt;: &lt;error&gt;</code></li></ul>
+<p>Check path existence, current-user read permission, file-descriptor/watch limits, and whether the root disappeared during startup. <code>status</code> reports <code>degraded</code> with paths/error after catch-up or path failures. Fix the underlying filesystem issue and restart; cursor recovery catches up complete appends.</p>
+<h2 id="hook-segment-conflict">Hook segment conflict<a class="heading-anchor" href="#hook-segment-conflict" aria-label="Link to Hook segment conflict">#</a></h2>
+<p><strong>Message:</strong> <code>hook segment output conflict: &lt;path&gt;</code></p>
+<p>An immutable Tama segment would map to an existing Lake output with different content. Stop publication, preserve both files and Tama segment metadata, and investigate producer/release identity. Never overwrite the existing partition. A correct replay of identical content is idempotent.</p>
+<h2 id="duckdb-unavailable-or-fails">DuckDB unavailable or fails<a class="heading-anchor" href="#duckdb-unavailable-or-fails" aria-label="Link to DuckDB unavailable or fails">#</a></h2>
+<p><strong>Messages:</strong></p>
+<ul><li><code>duckdb failed to start: &lt;error&gt;</code></li><li><code>duckdb terminated by signal</code></li><li><code>duckdb exited with status &lt;code&gt;: &lt;stderr&gt;</code></li><li><code>compact: duckdb failed for &lt;runtime&gt;</code></li></ul>
+<p>Streaming is unaffected. Install the supported DuckDB <code>1.5.x</code> CLI on <code>PATH</code>, then retry only the read/compact command. When <code>TRANSCRIPT_LAKE_SQL</code> is set, <code>missing &lt;path&gt; (TRANSCRIPT_LAKE_SQL is set but incomplete)</code> means the override directory lacks the requested <code>views.sql</code> or <code>signals.sql</code>; complete it or unset the override.</p>
+<h2 id="oko-integration-unavailable">Oko integration unavailable<a class="heading-anchor" href="#oko-integration-unavailable" aria-label="Link to Oko integration unavailable">#</a></h2>
+<p><strong>Message:</strong> <code>oko-cli is not on PATH; install Oko or set OKO_CLI, then run: oko-cli transcripts reindex</code></p>
+<p>Core Lake health is unaffected. Install a compatible CLI or set <code>OKO_CLI</code> to the executable. <code>rebuild-oko</code> can materialize export files without Oko; <code>--reindex</code> and <code>oko-refresh</code> require it.</p>
+<p>Malformed export refusals:</p>
+<ul><li><code>full Oko export refused malformed Lake rows; authoritative partitions were not modified</code></li><li><code>incremental Oko export refused malformed Lake rows; export cursor was not advanced</code></li></ul>
+<p>Preserve the partition and export state. Identify the malformed canonical row without modifying the authoritative file. Repair at the source/code level and rebuild to qualified data; never advance <code>export-cursors.json</code> manually.</p>
+<h2 id="invalid-flags-and-bounded-values">Invalid flags and bounded values<a class="heading-anchor" href="#invalid-flags-and-bounded-values" aria-label="Link to Invalid flags and bounded values">#</a></h2>
+<p>Common messages:</p>
+<ul><li><code>unknown &lt;command&gt; flag: --&lt;name&gt;</code></li><li><code>&lt;command&gt; received duplicate --&lt;name&gt;</code></li><li><code>--&lt;name&gt; requires a value</code></li><li><code>--limit must be an integer from 1 to 500</code></li><li><code>--days must be an integer from 1 to 500</code></li><li><code>unknown source &quot;&lt;value&gt;&quot; (expected one of: claude, codex, omp, droid, kimi, hooks)</code></li></ul>
+<p>Use <code>transcript-lake help &lt;command&gt;</code>. Do not make automation parse human help; prefer supported <code>--json</code> output.</p>
+<h2 id="label-refusals">Label refusals<a class="heading-anchor" href="#label-refusals" aria-label="Link to Label refusals">#</a></h2>
+<ul><li><code>--aspect must be a non-empty string</code></li><li><code>--value must be a non-empty string</code></li><li><code>--source must match ^(manual|human|model|brama)(:[A-Za-z0-9._/-]+)?$ (manual, human, model, or brama, with an optional :detail suffix)</code></li><li><code>unknown session &quot;&lt;id&gt;&quot;: not present in the selected Lake (check the id or start the stream first)</code></li></ul>
+<p>Confirm the selected root and session id. If the same id exists in multiple runtimes, provide <code>--runtime</code>. Never place a secret in <code>--value</code> or <code>--note</code>; labels are not masked.</p>
+<h2 id="local-goal-model-failures">Local goal model failures<a class="heading-anchor" href="#local-goal-model-failures" aria-label="Link to Local goal model failures">#</a></h2>
+<ul><li><code>local goal model requires llama-cli on PATH or TRANSCRIPT_LAKE_GOAL_LLAMA_CLI</code></li><li><code>&lt;ENV_KEY&gt; does not name a file: &lt;path&gt;</code></li><li><code>local goal model returned no goal tag</code></li><li><code>local goal model returned no opening goal tag</code></li><li><code>local goal model returned an invalid &lt;n&gt;-word title</code></li></ul>
+<p>Check <a href="/docs/configuration/">configuration</a>, pinned artifact integrity, and local disk/network availability for first acquisition. This feature is optional and does not affect streaming. Do not replace the pinned model/prompt with an unqualified artifact.</p>
+<h2 id="derived-cleanup">Derived cleanup<a class="heading-anchor" href="#derived-cleanup" aria-label="Link to Derived cleanup">#</a></h2>
+<p>Always preview:</p>
+<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake clean --target all</code></pre></div>
+<p>Expected footer: <code>preview only; add --apply to remove derived data</code>. Apply only after confirming paths. Invalid targets return <code>--target must be parquet, oko, or all</code>. <code>clean</code> never removes events, cursors, or labels.</p>
+<h2 id="escalation-bundle">Escalation bundle<a class="heading-anchor" href="#escalation-bundle" aria-label="Link to Escalation bundle">#</a></h2>
+<p>Provide public-safe, synthetic or redacted evidence only:</p>
+<ul><li>exact binary version and immutable release coordinate;</li><li><code>paths --json</code>, <code>doctor --json</code>, <code>status --json</code> with local usernames/paths/session identifiers redacted;</li><li>exact error string and exit status;</li><li>supervisor logs around the failure;</li><li>whether the old root and vendor source were preserved.</li></ul>
+<p>Never attach real transcripts or a production Lake to an issue.</p></div>
+        <nav class="article-pagination" aria-label="Adjacent documentation"><a href="/docs/cli-reference/"><small>Previous</small><span>← CLI reference</span></a><a class="next" href="/docs/integrations/"><small>Next</small><span>Integration contracts →</span></a></nav>
+      </article>
+      <aside class="page-toc" aria-label="On this page"><strong>On this page</strong><a href="#no-supported-roots" class="toc-level-2">No supported roots</a><a href="#writer-lease-is-held" class="toc-level-2">Writer lease is held</a><a href="#cursor-store-is-unreadable-or-corrupt" class="toc-level-2">Cursor store is unreadable or corrupt</a><a href="#source-shrank-or-changed-without-an-append" class="toc-level-2">Source shrank or changed without an append</a><a href="#stream-watcher-failures" class="toc-level-2">Stream watcher failures</a><a href="#hook-segment-conflict" class="toc-level-2">Hook segment conflict</a><a href="#duckdb-unavailable-or-fails" class="toc-level-2">DuckDB unavailable or fails</a><a href="#oko-integration-unavailable" class="toc-level-2">Oko integration unavailable</a><a href="#invalid-flags-and-bounded-values" class="toc-level-2">Invalid flags and bounded values</a><a href="#label-refusals" class="toc-level-2">Label refusals</a><a href="#local-goal-model-failures" class="toc-level-2">Local goal model failures</a><a href="#derived-cleanup" class="toc-level-2">Derived cleanup</a><a href="#escalation-bundle" class="toc-level-2">Escalation bundle</a></aside>
+    </div>
+  </main>
+</div>
+<footer class="docs-footer"><span>Transcript Lake documentation</span><a href="https://github.com/wisent-ai/transcript-lake">GitHub ↗</a></footer>
+</div>
+  <script src="/script.js" defer></script>
+</body>
+</html>

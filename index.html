@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Transcript Lake — Queryable memory for every coding agent</title>
+  <meta name="description" content="A privacy-masked local event archive for Claude Code, Codex, OMP, Droid, Kimi, and Tama coding-agent transcripts.">
+  <meta name="theme-color" content="#07121a">
+  <meta property="og:title" content="Transcript Lake — Queryable memory for every coding agent">
+  <meta property="og:description" content="A privacy-masked local event archive for Claude Code, Codex, OMP, Droid, Kimi, and Tama coding-agent transcripts.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://transcript-lake.wisent.com/">
+  <link rel="canonical" href="https://transcript-lake.wisent.com/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="landing-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="ambient" aria-hidden="true"></div>
+  <div class="landing-shell" id="top">
+<header class="site-header">
+  <a class="brand" href="#top" aria-label="Transcript Lake home"><span class="brand-mark" aria-hidden="true"><span>T</span>L</span><span class="brand-name">Transcript Lake</span></a>
+  <nav class="top-nav" aria-label="Primary navigation">
+    <a href="/docs/">Documentation</a>
+    <a href="https://github.com/wisent-ai/transcript-lake" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</header>
+<main id="main">
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow"><span class="live-dot"></span> Local-first agent memory</p>
+      <h1>Every agent conversation.<br><span>One queryable lake.</span></h1>
+      <p class="hero-lede">Transcript Lake turns conversations from Claude Code, Codex, OMP, Droid, Kimi, and Tama hooks into one privacy-masked local archive—while they happen.</p>
+      <div class="hero-actions">
+        <a class="button primary" href="/docs/quick-start/">Start the quick guide <span aria-hidden="true">→</span></a>
+        <button class="copy-command" type="button" data-copy="cargo install --path ."><span class="prompt">$</span><span>cargo install --path .</span><span class="copy-label">Copy</span></button>
+      </div>
+    </div>
+    <div class="lake-visual" aria-label="Six agent runtimes flowing through masking into one canonical archive">
+      <div class="source-column">
+        <span>Claude</span><span>Codex</span><span>OMP</span><span>Droid</span><span>Kimi</span><span>Tama</span>
+      </div>
+      <div class="flow-lines" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="lake-core"><small>MASK</small><strong>LAKE</strong><span>NDJSON</span></div>
+      <div class="query-chip"><span>SQL</span> SELECT evidence</div>
+    </div>
+  </section>
+
+  <section class="proof-strip" aria-label="Product facts">
+    <div><strong>06</strong><span>runtime inputs</span></div>
+    <div><strong>01</strong><span>canonical schema</span></div>
+    <div><strong>0</strong><span>cloud credentials</span></div>
+    <div><strong>∞</strong><span>local memory</span></div>
+  </section>
+
+  <section class="feature-section" id="capabilities">
+    <div class="section-heading"><p class="eyebrow">Why Transcript Lake</p><h2>Your team already solved it.<br>Now the answer is findable.</h2></div>
+    <div class="feature-grid">
+      <article><span class="feature-number">01</span><h3>Capture continuously</h3><p>A supervised, event-driven stream follows complete local transcript appends. Durable byte cursors resume without rescanning settled history.</p></article>
+      <article><span class="feature-number">02</span><h3>Mask before storage</h3><p>Credential-shaped and high-entropy text is replaced before an event reaches the canonical partition or any downstream projection.</p></article>
+      <article><span class="feature-number">03</span><h3>Query one contract</h3><p>Provider-neutral events make sessions, tools, tokens, hook decisions, labels, and cross-runtime signals available through DuckDB.</p></article>
+      <article><span class="feature-number">04</span><h3>Keep authority local</h3><p>Vendor stores remain read-only. NDJSON stays authoritative. Parquet and Oko projections are explicit, rebuildable derived state.</p></article>
+    </div>
+  </section>
+
+  <section class="pipeline-section">
+    <div class="pipeline-copy">
+      <p class="eyebrow">A narrow trust boundary</p>
+      <h2>Raw on one side.<br>Masked on the other.</h2>
+      <p>Transcript Lake gives every downstream consumer the same normalized evidence without making each one handle raw vendor files, secrets, or incompatible schemas.</p>
+      <a class="text-link" href="/docs/masking-guarantees/">Read the masking guarantees <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="terminal-card" aria-label="Transcript Lake stream output">
+      <div class="terminal-bar"><span></span><span></span><span></span><small>transcript-lake / stream</small></div>
+      <pre><span class="muted">$</span> transcript-lake stream
+<span class="cyan">stream start</span> roots=6
+<span class="muted">adapter</span> runtime=claude complete_lines=7
+<span class="muted">mask</span> assignments=2 tokens=1 entropy=1
+<span class="cyan">commit</span> files=1 failures=0 ms=50
+<span class="muted">cursor</span> durable offset=14592
+<span class="cursor-block"> </span></pre>
+    </div>
+  </section>
+
+  <section class="docs-callout">
+    <div><p class="eyebrow">Documentation</p><h2>From first stream<br>to recovery.</h2></div>
+    <div><p>Explore 42 complete guides, references, concepts, and executable examples covering the full development-channel contract.</p><a class="button dark" href="/docs/">Browse all documentation <span aria-hidden="true">→</span></a></div>
+  </section>
+</main>
+<footer class="site-footer"><a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"><span>T</span>L</span><span class="brand-name">Transcript Lake</span></a><p>Privacy-masked local memory for coding agents.</p><p>© 2026 Wisent</p></footer>
+</div>
+  <script src="/script.js" defer></script>
+</body>
+</html>

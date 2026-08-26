@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Restore one conversation — Transcript Lake</title>
+  <meta name="description" content="Outcome: read a past coding-agent conversation back in full — in order, untruncated — after the runtime that produced it has moved on, closed the session, or stopped mid-turn.">
+  <meta name="theme-color" content="#07121a">
+  <meta property="og:title" content="Restore one conversation — Transcript Lake">
+  <meta property="og:description" content="Outcome: read a past coding-agent conversation back in full — in order, untruncated — after the runtime that produced it has moved on, closed the session, or stopped mid-turn.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://transcript-lake.wisent.com/docs/examples/core/restore-a-conversation/">
+  <link rel="canonical" href="https://transcript-lake.wisent.com/docs/examples/core/restore-a-conversation/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="ambient" aria-hidden="true"></div>
+  <div class="docs-shell">
+<header class="site-header">
+  <a class="brand" href="/" aria-label="Transcript Lake home"><span class="brand-mark" aria-hidden="true"><span>T</span>L</span><span class="brand-name">Transcript Lake</span></a>
+  <nav class="top-nav" aria-label="Primary navigation">
+    <a href="/docs/">Documentation</a>
+    <a href="https://github.com/wisent-ai/transcript-lake" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</header>
+<button class="docs-menu-button" type="button" aria-controls="docs-nav" aria-expanded="false">Browse topics</button>
+<div class="docs-layout">
+  <div id="docs-nav"><nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home-link" href="/docs/">Documentation home</a><section class="nav-group"><h2>Start here</h2><a href="/docs/what-is-transcript-lake/">What is Transcript Lake?</a><a href="/docs/quick-start/">Quick start: a synthetic local Lake</a><a href="/docs/onboarding/">Onboarding</a><a href="/docs/configuration/">Configuration reference</a></section><section class="nav-group"><h2>Understand</h2><a href="/docs/architecture/">Architecture</a><a href="/docs/core/">Core functionality contract</a><a href="/docs/lake/">Transcript Lake</a><a href="/docs/ingestion-reference/">Ingestion pipeline reference</a><a href="/docs/masking-guarantees/">Masking guarantees and limits</a></section><section class="nav-group"><h2>Concepts</h2><a href="/docs/concepts/cursor/">Concept: cursor and writer lease</a><a href="/docs/concepts/event/">Concept: canonical event</a><a href="/docs/concepts/export/">Concept: export and derived data</a><a href="/docs/concepts/label/">Concept: label</a><a href="/docs/concepts/masking/">Concept: masking</a><a href="/docs/concepts/partition/">Concept: partition</a><a href="/docs/concepts/runtime/">Concept: runtime and adapter</a><a href="/docs/concepts/session/">Concept: session</a></section><section class="nav-group"><h2>Operate</h2><a href="/docs/cli-reference/">CLI reference</a><a href="/docs/runbook/">Operator runbook</a><a href="/docs/integrations/">Integration contracts</a><a href="/docs/releases/">Release and versioning policy</a><a href="/docs/walkthrough-live-append/">Walkthrough: catch up and commit a synthetic live append</a><a href="/docs/walkthrough-masking-audit/">Walkthrough: audit synthetic masking and derived output</a></section><section class="nav-group"><h2>Examples</h2><a href="/docs/examples/">Transcript Lake examples</a><a href="/docs/examples/core/cli-tour/">CLI tour</a><a href="/docs/examples/core/inspect-zero-state/">Inspect zero state and product identity</a><a href="/docs/examples/core/live-stream/">Keep a Lake current with the live stream</a><a href="/docs/examples/core/query-sessions/">Query cross-runtime sessions</a><a href="/docs/examples/core/restore-a-conversation/" aria-current="page" class="active">Restore one conversation</a><a href="/docs/examples/failures/representative-failures/">Diagnose representative failures</a><a href="/docs/examples/getting-started/first-local-archive/">Create the first local archive</a><a href="/docs/examples/integrations/duckdb/cross-source-signals/">Query cross-source signals with Oko</a><a href="/docs/examples/integrations/oko/rebuild-oko/">Reconstruct the Oko projection</a><a href="/docs/examples/integrations/oko/reindex-oko/">Reindex Oko after projection changes</a><a href="/docs/examples/integrations/tama/import-hook-decisions/">Stream Tama hook decisions</a><a href="/docs/examples/operations/build-release-assets/">Build release assets</a><a href="/docs/examples/operations/compact-to-parquet/">Compact partitions to Parquet</a><a href="/docs/examples/operations/reset-and-uninstall/">Reset local state and uninstall</a><a href="/docs/examples/operations/upgrade-and-rollback/">Upgrade and roll back an exact release</a><a href="/docs/examples/recovery/rebuild-into-empty-root/">Rebuild into an empty root</a><a href="/docs/examples/synthetic/live-append/">Synthetic example: live append</a><a href="/docs/examples/synthetic/masking-audit/">Synthetic example: masking audit</a></section></nav></div>
+  <main class="docs-main" id="main">
+    <div class="article-layout">
+      <article class="doc-article">
+        <header class="article-header"><p class="eyebrow">Documentation / Examples</p><h1>Restore one conversation</h1><p>Outcome: read a past coding-agent conversation back in full — in order, untruncated — after the runtime that produced it has moved on, closed the session, or stopped mid-turn.</p></header>
+        <div class="article-content"><p><strong>Outcome:</strong> read a past coding-agent conversation back in full — in order, untruncated — after the runtime that produced it has moved on, closed the session, or stopped mid-turn.</p>
+<p><strong>Risk:</strong> Read-only, external tool (DuckDB). <strong>Interface:</strong> <code>transcript-lake sessions</code>, <code>transcript-lake search</code>, <code>transcript-lake show</code>.</p>
+<h2 id="preconditions">Preconditions<a class="heading-anchor" href="#preconditions" aria-label="Link to Preconditions">#</a></h2>
+<ul><li>A Lake with at least one streamed session (<code>transcript-lake status</code> reports partitions).</li><li>DuckDB <code>1.5.x</code> on <code>PATH</code>; <code>show</code> reads through the canonical views.</li><li>The session identifier. <code>sessions</code>, <code>sessions --interrupted</code>, and <code>search</code> all print it.</li></ul>
+<h2 id="inputs">Inputs<a class="heading-anchor" href="#inputs" aria-label="Link to Inputs">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>Input</th><th>Meaning</th><th>Default</th></tr></thead><tbody><tr><td><code>&lt;session-id&gt;</code></td><td>Session to reconstruct, exactly as the Lake records it</td><td>required</td></tr><tr><td><code>--include &lt;types&gt;</code></td><td>Comma-separated event types, or <code>all</code></td><td><code>user,assistant</code></td></tr><tr><td><code>--limit &lt;n&gt;</code></td><td>Maximum events rendered</td><td><code>2000</code>, maximum <code>50000</code></td></tr><tr><td><code>--json</code></td><td>Machine-readable record instead of dialogue</td><td>off</td></tr></tbody></table></div>
+<h2 id="steps">Steps<a class="heading-anchor" href="#steps" aria-label="Link to Steps">#</a></h2>
+<p>Locate the conversation. Any of the three works; the last one is for a session that stopped without an answer:</p>
+<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake search &quot;transcript-label-trainer&quot; --limit 5
+transcript-lake sessions --runtime kimi --limit 10
+transcript-lake sessions --interrupted --limit 10</code></pre></div>
+<p>Read it back:</p>
+<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake show session_6ee965ab-4854-488a-9ca2-2515e9da3e07</code></pre></div>
+<p>Expected shape: an identity header (runtime, project, span, turn mix, selected types), then one block per event, oldest first, each opening with <code>[&lt;timestamp&gt;] &lt;event_type&gt;</code> and carrying the complete masked text, then the footer.</p>
+<p>Reconstruct the complete record — reasoning, tool calls, tool results and metadata included — when the dialogue alone does not explain what happened:</p>
+<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake show session_6ee965ab-4854-488a-9ca2-2515e9da3e07 --include all --limit 5000</code></pre></div>
+<p>Narrow to one dimension, for example only what the agent thought:</p>
+<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake show session_6ee965ab-4854-488a-9ca2-2515e9da3e07 --include thinking</code></pre></div>
+<p>Hand the conversation to another program:</p>
+<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake show session_6ee965ab-4854-488a-9ca2-2515e9da3e07 --include all --json &gt; conversation.json</code></pre></div>
+<h2 id="verification">Verification<a class="heading-anchor" href="#verification" aria-label="Link to Verification">#</a></h2>
+<ul><li>The header span matches the <code>first_ts</code>/<code>last_ts</code> that <code>sessions</code> reports for the same identifier.</li><li>The footer reads <code>rendered N of M matching events</code>. <code>N == M</code> means the reconstruction is complete; <code>N &lt; M</code> prints <code>(raise --limit for the rest)</code>, so a cut is visible rather than silent.</li><li>Events appear in ascending timestamp order, which is the order the conversation happened in.</li></ul>
+<h2 id="side-effects-and-cleanup">Side effects and cleanup<a class="heading-anchor" href="#side-effects-and-cleanup" aria-label="Link to Side effects and cleanup">#</a></h2>
+<p>None. <code>show</code> reads Lake partitions through DuckDB views and writes nothing. Redirected output is the operator's file to keep or delete.</p>
+<h2 id="representative-failure">Representative failure<a class="heading-anchor" href="#representative-failure" aria-label="Link to Representative failure">#</a></h2>
+<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake show not-a-session</code></pre></div>
+<p>fails with <code>unknown session &quot;not-a-session&quot;: not present in the selected Lake (check the id or start the stream first)</code> and a non-zero status; an unknown <code>--include</code> value is rejected with the exact list of accepted event types. Neither case prints a partial transcript.</p>
+<h2 id="notes">Notes<a class="heading-anchor" href="#notes" aria-label="Link to Notes">#</a></h2>
+<p>Text is masked Lake evidence, not the raw vendor transcript: secrets and high-entropy strings appear as <code>[masked:…]</code> placeholders. Hostname, timestamps, project paths, and model names remain, so treat an exported conversation as sensitive.</p></div>
+        <nav class="article-pagination" aria-label="Adjacent documentation"><a href="/docs/examples/core/query-sessions/"><small>Previous</small><span>← Query cross-runtime sessions</span></a><a class="next" href="/docs/examples/failures/representative-failures/"><small>Next</small><span>Diagnose representative failures →</span></a></nav>
+      </article>
+      <aside class="page-toc" aria-label="On this page"><strong>On this page</strong><a href="#preconditions" class="toc-level-2">Preconditions</a><a href="#inputs" class="toc-level-2">Inputs</a><a href="#steps" class="toc-level-2">Steps</a><a href="#verification" class="toc-level-2">Verification</a><a href="#side-effects-and-cleanup" class="toc-level-2">Side effects and cleanup</a><a href="#representative-failure" class="toc-level-2">Representative failure</a><a href="#notes" class="toc-level-2">Notes</a></aside>
+    </div>
+  </main>
+</div>
+<footer class="docs-footer"><span>Transcript Lake documentation</span><a href="https://github.com/wisent-ai/transcript-lake">GitHub ↗</a></footer>
+</div>
+  <script src="/script.js" defer></script>
+</body>
+</html>

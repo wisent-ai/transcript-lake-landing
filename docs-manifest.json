@@ -1,0 +1,176 @@
+{
+  "source_repository": "wisent-ai/transcript-lake",
+  "source_revision": "89dbc7136a269388087a422c35b77b21230ebf3f",
+  "canonical_base": "https://transcript-lake.wisent.com/docs/",
+  "topic_count": 42,
+  "topics": [
+    {
+      "source": "docs/CORE.md",
+      "url": "https://transcript-lake.wisent.com/docs/core/"
+    },
+    {
+      "source": "docs/INTEGRATIONS.md",
+      "url": "https://transcript-lake.wisent.com/docs/integrations/"
+    },
+    {
+      "source": "docs/LAKE.md",
+      "url": "https://transcript-lake.wisent.com/docs/lake/"
+    },
+    {
+      "source": "docs/ONBOARDING.md",
+      "url": "https://transcript-lake.wisent.com/docs/onboarding/"
+    },
+    {
+      "source": "docs/RELEASES.md",
+      "url": "https://transcript-lake.wisent.com/docs/releases/"
+    },
+    {
+      "source": "docs/architecture.md",
+      "url": "https://transcript-lake.wisent.com/docs/architecture/"
+    },
+    {
+      "source": "docs/cli-reference.md",
+      "url": "https://transcript-lake.wisent.com/docs/cli-reference/"
+    },
+    {
+      "source": "docs/concepts/cursor.md",
+      "url": "https://transcript-lake.wisent.com/docs/concepts/cursor/"
+    },
+    {
+      "source": "docs/concepts/event.md",
+      "url": "https://transcript-lake.wisent.com/docs/concepts/event/"
+    },
+    {
+      "source": "docs/concepts/export.md",
+      "url": "https://transcript-lake.wisent.com/docs/concepts/export/"
+    },
+    {
+      "source": "docs/concepts/label.md",
+      "url": "https://transcript-lake.wisent.com/docs/concepts/label/"
+    },
+    {
+      "source": "docs/concepts/masking.md",
+      "url": "https://transcript-lake.wisent.com/docs/concepts/masking/"
+    },
+    {
+      "source": "docs/concepts/partition.md",
+      "url": "https://transcript-lake.wisent.com/docs/concepts/partition/"
+    },
+    {
+      "source": "docs/concepts/runtime.md",
+      "url": "https://transcript-lake.wisent.com/docs/concepts/runtime/"
+    },
+    {
+      "source": "docs/concepts/session.md",
+      "url": "https://transcript-lake.wisent.com/docs/concepts/session/"
+    },
+    {
+      "source": "docs/configuration.md",
+      "url": "https://transcript-lake.wisent.com/docs/configuration/"
+    },
+    {
+      "source": "docs/ingestion-reference.md",
+      "url": "https://transcript-lake.wisent.com/docs/ingestion-reference/"
+    },
+    {
+      "source": "docs/masking-guarantees.md",
+      "url": "https://transcript-lake.wisent.com/docs/masking-guarantees/"
+    },
+    {
+      "source": "docs/quick-start.md",
+      "url": "https://transcript-lake.wisent.com/docs/quick-start/"
+    },
+    {
+      "source": "docs/runbook.md",
+      "url": "https://transcript-lake.wisent.com/docs/runbook/"
+    },
+    {
+      "source": "docs/walkthrough-live-append.md",
+      "url": "https://transcript-lake.wisent.com/docs/walkthrough-live-append/"
+    },
+    {
+      "source": "docs/walkthrough-masking-audit.md",
+      "url": "https://transcript-lake.wisent.com/docs/walkthrough-masking-audit/"
+    },
+    {
+      "source": "docs/what-is-transcript-lake.md",
+      "url": "https://transcript-lake.wisent.com/docs/what-is-transcript-lake/"
+    },
+    {
+      "source": "examples/README.md",
+      "url": "https://transcript-lake.wisent.com/docs/examples/"
+    },
+    {
+      "source": "examples/core/cli-tour.md",
+      "url": "https://transcript-lake.wisent.com/docs/examples/core/cli-tour/"
+    },
+    {
+      "source": "examples/core/inspect-zero-state.md",
+      "url": "https://transcript-lake.wisent.com/docs/examples/core/inspect-zero-state/"
+    },
+    {
+      "source": "examples/core/live-stream.md",
+      "url": "https://transcript-lake.wisent.com/docs/examples/core/live-stream/"
+    },
+    {
+      "source": "examples/core/query-sessions.md",
+      "url": "https://transcript-lake.wisent.com/docs/examples/core/query-sessions/"
+    },
+    {
+      "source": "examples/core/restore-a-conversation.md",
+      "url": "https://transcript-lake.wisent.com/docs/examples/core/restore-a-conversation/"
+    },
+    {
+      "source": "examples/failures/representative-failures.md",
+      "url": "https://transcript-lake.wisent.com/docs/examples/failures/representative-failures/"
+    },
+    {
+      "source": "examples/getting-started/first-local-archive.md",
+      "url": "https://transcript-lake.wisent.com/docs/examples/getting-started/first-local-archive/"
+    },
+    {
+      "source": "examples/integrations/duckdb/cross-source-signals.md",
+      "url": "https://transcript-lake.wisent.com/docs/examples/integrations/duckdb/cross-source-signals/"
+    },
+    {
+      "source": "examples/integrations/oko/rebuild-oko.md",
+      "url": "https://transcript-lake.wisent.com/docs/examples/integrations/oko/rebuild-oko/"
+    },
+    {
+      "source": "examples/integrations/oko/reindex-oko.md",
+      "url": "https://transcript-lake.wisent.com/docs/examples/integrations/oko/reindex-oko/"
+    },
+    {
+      "source": "examples/integrations/tama/import-hook-decisions.md",
+      "url": "https://transcript-lake.wisent.com/docs/examples/integrations/tama/import-hook-decisions/"
+    },
+    {
+      "source": "examples/operations/build-release-assets.md",
+      "url": "https://transcript-lake.wisent.com/docs/examples/operations/build-release-assets/"
+    },
+    {
+      "source": "examples/operations/compact-to-parquet.md",
+      "url": "https://transcript-lake.wisent.com/docs/examples/operations/compact-to-parquet/"
+    },
+    {
+      "source": "examples/operations/reset-and-uninstall.md",
+      "url": "https://transcript-lake.wisent.com/docs/examples/operations/reset-and-uninstall/"
+    },
+    {
+      "source": "examples/operations/upgrade-and-rollback.md",
+      "url": "https://transcript-lake.wisent.com/docs/examples/operations/upgrade-and-rollback/"
+    },
+    {
+      "source": "examples/recovery/rebuild-into-empty-root.md",
+      "url": "https://transcript-lake.wisent.com/docs/examples/recovery/rebuild-into-empty-root/"
+    },
+    {
+      "source": "examples/synthetic/live-append.md",
+      "url": "https://transcript-lake.wisent.com/docs/examples/synthetic/live-append/"
+    },
+    {
+      "source": "examples/synthetic/masking-audit.md",
+      "url": "https://transcript-lake.wisent.com/docs/examples/synthetic/masking-audit/"
+    }
+  ]
+}

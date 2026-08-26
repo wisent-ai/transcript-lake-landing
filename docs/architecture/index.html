@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Architecture — Transcript Lake</title>
+  <meta name="description" content="src/adapters/ implements one pure line parser for Claude, Codex, omp, Factory Droid, and Kimi. src/hooksegments.rs ingests Tama closed segments or the legacy hook log. Adapters own vendor-field interpretation, not masking or IO. Malformed/incomplete lines yiel">
+  <meta name="theme-color" content="#07121a">
+  <meta property="og:title" content="Architecture — Transcript Lake">
+  <meta property="og:description" content="src/adapters/ implements one pure line parser for Claude, Codex, omp, Factory Droid, and Kimi. src/hooksegments.rs ingests Tama closed segments or the legacy hook log. Adapters own vendor-field interpretation, not masking or IO. Malformed/incomplete lines yiel">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://transcript-lake.wisent.com/docs/architecture/">
+  <link rel="canonical" href="https://transcript-lake.wisent.com/docs/architecture/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="ambient" aria-hidden="true"></div>
+  <div class="docs-shell">
+<header class="site-header">
+  <a class="brand" href="/" aria-label="Transcript Lake home"><span class="brand-mark" aria-hidden="true"><span>T</span>L</span><span class="brand-name">Transcript Lake</span></a>
+  <nav class="top-nav" aria-label="Primary navigation">
+    <a href="/docs/">Documentation</a>
+    <a href="https://github.com/wisent-ai/transcript-lake" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</header>
+<button class="docs-menu-button" type="button" aria-controls="docs-nav" aria-expanded="false">Browse topics</button>
+<div class="docs-layout">
+  <div id="docs-nav"><nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home-link" href="/docs/">Documentation home</a><section class="nav-group"><h2>Start here</h2><a href="/docs/what-is-transcript-lake/">What is Transcript Lake?</a><a href="/docs/quick-start/">Quick start: a synthetic local Lake</a><a href="/docs/onboarding/">Onboarding</a><a href="/docs/configuration/">Configuration reference</a></section><section class="nav-group"><h2>Understand</h2><a href="/docs/architecture/" aria-current="page" class="active">Architecture</a><a href="/docs/core/">Core functionality contract</a><a href="/docs/lake/">Transcript Lake</a><a href="/docs/ingestion-reference/">Ingestion pipeline reference</a><a href="/docs/masking-guarantees/">Masking guarantees and limits</a></section><section class="nav-group"><h2>Concepts</h2><a href="/docs/concepts/cursor/">Concept: cursor and writer lease</a><a href="/docs/concepts/event/">Concept: canonical event</a><a href="/docs/concepts/export/">Concept: export and derived data</a><a href="/docs/concepts/label/">Concept: label</a><a href="/docs/concepts/masking/">Concept: masking</a><a href="/docs/concepts/partition/">Concept: partition</a><a href="/docs/concepts/runtime/">Concept: runtime and adapter</a><a href="/docs/concepts/session/">Concept: session</a></section><section class="nav-group"><h2>Operate</h2><a href="/docs/cli-reference/">CLI reference</a><a href="/docs/runbook/">Operator runbook</a><a href="/docs/integrations/">Integration contracts</a><a href="/docs/releases/">Release and versioning policy</a><a href="/docs/walkthrough-live-append/">Walkthrough: catch up and commit a synthetic live append</a><a href="/docs/walkthrough-masking-audit/">Walkthrough: audit synthetic masking and derived output</a></section><section class="nav-group"><h2>Examples</h2><a href="/docs/examples/">Transcript Lake examples</a><a href="/docs/examples/core/cli-tour/">CLI tour</a><a href="/docs/examples/core/inspect-zero-state/">Inspect zero state and product identity</a><a href="/docs/examples/core/live-stream/">Keep a Lake current with the live stream</a><a href="/docs/examples/core/query-sessions/">Query cross-runtime sessions</a><a href="/docs/examples/core/restore-a-conversation/">Restore one conversation</a><a href="/docs/examples/failures/representative-failures/">Diagnose representative failures</a><a href="/docs/examples/getting-started/first-local-archive/">Create the first local archive</a><a href="/docs/examples/integrations/duckdb/cross-source-signals/">Query cross-source signals with Oko</a><a href="/docs/examples/integrations/oko/rebuild-oko/">Reconstruct the Oko projection</a><a href="/docs/examples/integrations/oko/reindex-oko/">Reindex Oko after projection changes</a><a href="/docs/examples/integrations/tama/import-hook-decisions/">Stream Tama hook decisions</a><a href="/docs/examples/operations/build-release-assets/">Build release assets</a><a href="/docs/examples/operations/compact-to-parquet/">Compact partitions to Parquet</a><a href="/docs/examples/operations/reset-and-uninstall/">Reset local state and uninstall</a><a href="/docs/examples/operations/upgrade-and-rollback/">Upgrade and roll back an exact release</a><a href="/docs/examples/recovery/rebuild-into-empty-root/">Rebuild into an empty root</a><a href="/docs/examples/synthetic/live-append/">Synthetic example: live append</a><a href="/docs/examples/synthetic/masking-audit/">Synthetic example: masking audit</a></section></nav></div>
+  <main class="docs-main" id="main">
+    <div class="article-layout">
+      <article class="doc-article">
+        <header class="article-header"><p class="eyebrow">Documentation / Understand</p><h1>Architecture</h1><p>src/adapters/ implements one pure line parser for Claude, Codex, omp, Factory Droid, and Kimi. src/hooksegments.rs ingests Tama closed segments or the legacy hook log. Adapters own vendor-field interpretation, not masking or IO. Malformed/incomplete lines yiel</p></header>
+        <div class="article-content"><h2 id="data-flow">Data flow<a class="heading-anchor" href="#data-flow" aria-label="Link to Data flow">#</a></h2>
+<div class="code-block"><div class="code-label">text</div><pre><code>vendor stores / Tama closed segments (read-only)
+                |
+          runtime adapter
+                | RawEvent (unmasked, in memory)
+                v
+       canonicalizer + masker + caps
+                |
+        CanonicalEvent (masked)
+          /          |          \
+ daily NDJSON   Oko projection   cursor checkpoint
+(authoritative) (rebuildable)    (resume state)
+          |
+ compiled DuckDB views
+     /        |       \
+read CLI   Parquet   operator labels
+           mirror    (separate store)</code></pre></div>
+<h2 id="components">Components<a class="heading-anchor" href="#components" aria-label="Link to Components">#</a></h2>
+<h3 id="adapter-layer">Adapter layer<a class="heading-anchor" href="#adapter-layer" aria-label="Link to Adapter layer">#</a></h3>
+<p><code>src/adapters/</code> implements one pure line parser for Claude, Codex, omp, Factory Droid, and Kimi. <code>src/hook_segments.rs</code> ingests Tama closed segments or the legacy hook log. Adapters own vendor-field interpretation, not masking or IO. Malformed/incomplete lines yield no events because a live transcript commonly ends with a torn line.</p>
+<h3 id="stream-layer">Stream layer<a class="heading-anchor" href="#stream-layer" aria-label="Link to Stream layer">#</a></h3>
+<p><code>src/commands/stream.rs</code> installs recursive native filesystem watches before catch-up, so appends during initialization are queued. <code>src/stream.rs</code> discovers cursors, reads only complete appended lines, batches up to 512 canonical events, and maps each source/date to a deterministic partition.</p>
+<p>The stream status file moves through <code>catching-up</code>, <code>running</code>, <code>degraded</code>, and final stopped state. Human logs use <code>&lt;timestamp&gt; stream &lt;kind&gt; key=value</code>; <code>--json</code> emits one object per log with <code>ts</code>, <code>kind</code>, and detail fields.</p>
+<h3 id="state-and-leases">State and leases<a class="heading-anchor" href="#state-and-leases" aria-label="Link to State and leases">#</a></h3>
+<p><code>LAKE_DATA/cursors.json</code> maps source paths to <code>mtimeMs</code>, <code>size</code>, and <code>offset</code>. Publication writes <code>.cursors.json.tmp-&lt;pid&gt;-&lt;uuid&gt;</code>, fsyncs it, renames it, then fsyncs the data directory under <code>cursors.lock</code>.</p>
+<p><code>stream.lock/owner.json</code> identifies one writer by host, pid, start time, and random token. An atomic prepared-directory rename claims the lease. Live owners cause an immediate refusal. Dead owners may be removed after liveness checks. Release verifies the token before removal.</p>
+<h3 id="authoritative-partitions">Authoritative partitions<a class="heading-anchor" href="#authoritative-partitions" aria-label="Link to Authoritative partitions">#</a></h3>
+<p>Canonical events are append-only NDJSON at:</p>
+<div class="code-block"><div class="code-label">text</div><pre><code>LAKE_DATA/events/runtime=&lt;runtime&gt;/date=&lt;YYYY-MM-DD&gt;/part-&lt;12-hex-path-digest&gt;.ndjson</code></pre></div>
+<p>The event date comes from the timestamp prefix or <code>unknown</code>. NDJSON partitions are the canonical masked store. Parquet and Oko exports are derived and may be deleted/rebuilt.</p>
+<h3 id="oko-projection">Oko projection<a class="heading-anchor" href="#oko-projection" aria-label="Link to Oko projection">#</a></h3>
+<p>Conversation events are projected to:</p>
+<div class="code-block"><div class="code-label">text</div><pre><code>LAKE_DATA/exports/oko/runtime=&lt;runtime&gt;/&lt;sha256(runtime + newline + session-id)&gt;.jsonl</code></pre></div>
+<p>Each <code>oko-import-v1</code> line includes a deterministic 32-hex UUID and the canonical conversation fields. Session files are deduplicated by UUID and ordered by timestamp then UUID. <code>export-cursors.json</code> records each partition's <code>size</code>, <code>mtimeMs</code>, and <code>physicalSize</code> after successful publication. Truncation, same-size rewrite, first run, or <code>rebuild-oko</code> selects a full rebuild through bounded staging; ordinary appends are incremental. Oko scans this tree read-only.</p>
+<h3 id="read-model">Read model<a class="heading-anchor" href="#read-model" aria-label="Link to Read model">#</a></h3>
+<p>The binary embeds <code>sql/views.sql</code> and <code>sql/signals.sql</code>. Core views are <code>events</code>, <code>sessions</code>, <code>interrupted_sessions</code>, <code>tools_daily</code>, <code>tokens_daily</code>, <code>hook_decisions</code>, <code>blocks_by_hook</code>, and <code>labels</code>. Signal views attach Oko's SQLite catalogue only when requested. The CLI invokes DuckDB; streaming itself has no DuckDB dependency.</p>
+<h3 id="labels">Labels<a class="heading-anchor" href="#labels" aria-label="Link to Labels">#</a></h3>
+<p><code>LAKE_DATA/labels/labels.ndjson</code> is an append-only operator annotation store with <code>ts</code>, <code>session_id</code>, <code>runtime</code>, <code>aspect</code>, <code>value</code>, <code>note</code>, and <code>source</code>. It is neither authoritative transcript evidence nor masked by the event masker. It does not share the event writer lease.</p>
+<h2 id="failure-containment">Failure containment<a class="heading-anchor" href="#failure-containment" aria-label="Link to Failure containment">#</a></h2>
+<ul><li>Vendor stores are always read-only.</li><li>Invalid cursor state is refused rather than silently reset.</li><li>Source shrink or rewrite is refused rather than merged.</li><li>Recovery writes only to a different empty root.</li><li>Malformed Oko rebuild rows refuse cursor advancement and do not modify authoritative partitions.</li><li><code>clean</code> targets only derived Parquet/Oko state and previews unless <code>--apply</code> is present.</li></ul>
+<p>See the <a href="/docs/ingestion-reference/">ingestion reference</a>, <a href="/docs/configuration/">configuration</a>, and normative <a href="/docs/lake/">data contract</a>.</p></div>
+        <nav class="article-pagination" aria-label="Adjacent documentation"><a href="/docs/configuration/"><small>Previous</small><span>← Configuration reference</span></a><a class="next" href="/docs/core/"><small>Next</small><span>Core functionality contract →</span></a></nav>
+      </article>
+      <aside class="page-toc" aria-label="On this page"><strong>On this page</strong><a href="#data-flow" class="toc-level-2">Data flow</a><a href="#components" class="toc-level-2">Components</a><a href="#adapter-layer" class="toc-level-3">Adapter layer</a><a href="#stream-layer" class="toc-level-3">Stream layer</a><a href="#state-and-leases" class="toc-level-3">State and leases</a><a href="#authoritative-partitions" class="toc-level-3">Authoritative partitions</a><a href="#oko-projection" class="toc-level-3">Oko projection</a><a href="#read-model" class="toc-level-3">Read model</a><a href="#labels" class="toc-level-3">Labels</a><a href="#failure-containment" class="toc-level-2">Failure containment</a></aside>
+    </div>
+  </main>
+</div>
+<footer class="docs-footer"><span>Transcript Lake documentation</span><a href="https://github.com/wisent-ai/transcript-lake">GitHub ↗</a></footer>
+</div>
+  <script src="/script.js" defer></script>
+</body>
+</html>

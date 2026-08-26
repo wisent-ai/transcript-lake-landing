@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Walkthrough: audit synthetic masking and derived output — Transcript Lake</title>
+  <meta name="description" content="This walkthrough uses the same isolated 2026-08-24 synthetic fixture as the live-append walkthrough. All apparent credentials were invented specifically to exercise the three masker classes.">
+  <meta name="theme-color" content="#07121a">
+  <meta property="og:title" content="Walkthrough: audit synthetic masking and derived output — Transcript Lake">
+  <meta property="og:description" content="This walkthrough uses the same isolated 2026-08-24 synthetic fixture as the live-append walkthrough. All apparent credentials were invented specifically to exercise the three masker classes.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://transcript-lake.wisent.com/docs/walkthrough-masking-audit/">
+  <link rel="canonical" href="https://transcript-lake.wisent.com/docs/walkthrough-masking-audit/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="ambient" aria-hidden="true"></div>
+  <div class="docs-shell">
+<header class="site-header">
+  <a class="brand" href="/" aria-label="Transcript Lake home"><span class="brand-mark" aria-hidden="true"><span>T</span>L</span><span class="brand-name">Transcript Lake</span></a>
+  <nav class="top-nav" aria-label="Primary navigation">
+    <a href="/docs/">Documentation</a>
+    <a href="https://github.com/wisent-ai/transcript-lake" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</header>
+<button class="docs-menu-button" type="button" aria-controls="docs-nav" aria-expanded="false">Browse topics</button>
+<div class="docs-layout">
+  <div id="docs-nav"><nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home-link" href="/docs/">Documentation home</a><section class="nav-group"><h2>Start here</h2><a href="/docs/what-is-transcript-lake/">What is Transcript Lake?</a><a href="/docs/quick-start/">Quick start: a synthetic local Lake</a><a href="/docs/onboarding/">Onboarding</a><a href="/docs/configuration/">Configuration reference</a></section><section class="nav-group"><h2>Understand</h2><a href="/docs/architecture/">Architecture</a><a href="/docs/core/">Core functionality contract</a><a href="/docs/lake/">Transcript Lake</a><a href="/docs/ingestion-reference/">Ingestion pipeline reference</a><a href="/docs/masking-guarantees/">Masking guarantees and limits</a></section><section class="nav-group"><h2>Concepts</h2><a href="/docs/concepts/cursor/">Concept: cursor and writer lease</a><a href="/docs/concepts/event/">Concept: canonical event</a><a href="/docs/concepts/export/">Concept: export and derived data</a><a href="/docs/concepts/label/">Concept: label</a><a href="/docs/concepts/masking/">Concept: masking</a><a href="/docs/concepts/partition/">Concept: partition</a><a href="/docs/concepts/runtime/">Concept: runtime and adapter</a><a href="/docs/concepts/session/">Concept: session</a></section><section class="nav-group"><h2>Operate</h2><a href="/docs/cli-reference/">CLI reference</a><a href="/docs/runbook/">Operator runbook</a><a href="/docs/integrations/">Integration contracts</a><a href="/docs/releases/">Release and versioning policy</a><a href="/docs/walkthrough-live-append/">Walkthrough: catch up and commit a synthetic live append</a><a href="/docs/walkthrough-masking-audit/" aria-current="page" class="active">Walkthrough: audit synthetic masking and derived output</a></section><section class="nav-group"><h2>Examples</h2><a href="/docs/examples/">Transcript Lake examples</a><a href="/docs/examples/core/cli-tour/">CLI tour</a><a href="/docs/examples/core/inspect-zero-state/">Inspect zero state and product identity</a><a href="/docs/examples/core/live-stream/">Keep a Lake current with the live stream</a><a href="/docs/examples/core/query-sessions/">Query cross-runtime sessions</a><a href="/docs/examples/core/restore-a-conversation/">Restore one conversation</a><a href="/docs/examples/failures/representative-failures/">Diagnose representative failures</a><a href="/docs/examples/getting-started/first-local-archive/">Create the first local archive</a><a href="/docs/examples/integrations/duckdb/cross-source-signals/">Query cross-source signals with Oko</a><a href="/docs/examples/integrations/oko/rebuild-oko/">Reconstruct the Oko projection</a><a href="/docs/examples/integrations/oko/reindex-oko/">Reindex Oko after projection changes</a><a href="/docs/examples/integrations/tama/import-hook-decisions/">Stream Tama hook decisions</a><a href="/docs/examples/operations/build-release-assets/">Build release assets</a><a href="/docs/examples/operations/compact-to-parquet/">Compact partitions to Parquet</a><a href="/docs/examples/operations/reset-and-uninstall/">Reset local state and uninstall</a><a href="/docs/examples/operations/upgrade-and-rollback/">Upgrade and roll back an exact release</a><a href="/docs/examples/recovery/rebuild-into-empty-root/">Rebuild into an empty root</a><a href="/docs/examples/synthetic/live-append/">Synthetic example: live append</a><a href="/docs/examples/synthetic/masking-audit/">Synthetic example: masking audit</a></section></nav></div>
+  <main class="docs-main" id="main">
+    <div class="article-layout">
+      <article class="doc-article">
+        <header class="article-header"><p class="eyebrow">Documentation / Operate</p><h1>Walkthrough: audit synthetic masking and derived output</h1><p>This walkthrough uses the same isolated 2026-08-24 synthetic fixture as the live-append walkthrough. All apparent credentials were invented specifically to exercise the three masker classes.</p></header>
+        <div class="article-content"><p>This walkthrough uses the same isolated 2026-08-24 synthetic fixture as the live-append walkthrough. All apparent credentials were invented specifically to exercise the three masker classes.</p>
+<h2 id="stored-evidence">Stored evidence<a class="heading-anchor" href="#stored-evidence" aria-label="Link to Stored evidence">#</a></h2>
+<p>The initial user event became:</p>
+<div class="code-block"><div class="code-label">json</div><pre><code>{&quot;ts&quot;:&quot;2026-08-24T09:00:00.000Z&quot;,&quot;runtime&quot;:&quot;claude&quot;,&quot;machine&quot;:&quot;demo-host.local&quot;,&quot;session_id&quot;:&quot;0a1b2c3d-1111-4222-8333-444455556666&quot;,&quot;project&quot;:&quot;/tmp/demo-app&quot;,&quot;event_type&quot;:&quot;user&quot;,&quot;text&quot;:&quot;Deploy fails. I set [masked:assignment:37:5be474f8] and the provider token is [masked:token:36:e3bebba1] - can you check the config?&quot;}</code></pre></div>
+<p>The tool result retained only assignment markers:</p>
+<div class="code-block"><div class="code-label">json</div><pre><code>{&quot;event_type&quot;:&quot;tool_result&quot;,&quot;text&quot;:&quot;[masked:assignment:37:5be474f8]\n[masked:assignment:54:b3bc1b09]\n&quot;}</code></pre></div>
+<p>The live append became:</p>
+<div class="code-block"><div class="code-label">json</div><pre><code>{&quot;ts&quot;:&quot;2026-08-24T09:01:00.000Z&quot;,&quot;event_type&quot;:&quot;user&quot;,&quot;text&quot;:&quot;Also scrub this pasted blob before we archive: [masked:entropy:44:d0fa7c09]&quot;}</code></pre></div>
+<p>The repeated <code>5be474f8</code> demonstrates stable equality correlation. The markers disclose class and original character count, not plaintext.</p>
+<h2 id="plaintext-absence-check">Plaintext absence check<a class="heading-anchor" href="#plaintext-absence-check" aria-label="Link to Plaintext absence check">#</a></h2>
+<p>The retained audit searched for all three invented values under the isolated <code>lake/</code>. Counts were zero in:</p>
+<div class="code-block"><div class="code-label">text</div><pre><code>lake/stream-status.json
+lake/exports/oko/runtime=claude/&lt;session-hash&gt;.jsonl
+lake/cursors.json
+lake/events/runtime=claude/date=2026-08-24/part-b5939b619a3d.ndjson</code></pre></div>
+<p>It concluded <code>NO PLAINTEXT SECRETS UNDER lake/</code>. That conclusion is scoped to these exact synthetic literals and files, not to arbitrary secret shapes.</p>
+<h2 id="derived-mirror">Derived mirror<a class="heading-anchor" href="#derived-mirror" aria-label="Link to Derived mirror">#</a></h2>
+<p>The already-ingested partition was compacted with DuckDB 1.5.5:</p>
+<div class="code-block"><div class="code-label">text</div><pre><code>claude: ndjson 3352 bytes -&gt; parquet 5122 bytes (/private/tmp/lake-demo/lake/parquet/runtime=claude/events.parquet)</code></pre></div>
+<p>Because compaction reads canonical NDJSON, the Parquet mirror receives masked text. NDJSON remains authoritative and the mirror can be removed with <code>clean --target parquet --apply</code> after preview.</p>
+<h2 id="operator-conclusions">Operator conclusions<a class="heading-anchor" href="#operator-conclusions" aria-label="Link to Operator conclusions">#</a></h2>
+<ul><li>Whole detected hits did not cross the durable boundary in this run.</li><li>Oko export and Parquet were downstream of canonical masking.</li><li>A repeated fingerprint is intentionally correlatable.</li><li>Machine/project/session metadata and ordinary text remained and must be treated as sensitive.</li><li>Real credentials should be rotated, not merely archived behind markers.</li></ul>
+<p>See the <a href="/docs/examples/synthetic/masking-audit/">synthetic masking example</a> and <a href="/docs/masking-guarantees/">full guarantee boundary</a>.</p></div>
+        <nav class="article-pagination" aria-label="Adjacent documentation"><a href="/docs/walkthrough-live-append/"><small>Previous</small><span>← Walkthrough: catch up and commit a synthetic live append</span></a><a class="next" href="/docs/examples/"><small>Next</small><span>Transcript Lake examples →</span></a></nav>
+      </article>
+      <aside class="page-toc" aria-label="On this page"><strong>On this page</strong><a href="#stored-evidence" class="toc-level-2">Stored evidence</a><a href="#plaintext-absence-check" class="toc-level-2">Plaintext absence check</a><a href="#derived-mirror" class="toc-level-2">Derived mirror</a><a href="#operator-conclusions" class="toc-level-2">Operator conclusions</a></aside>
+    </div>
+  </main>
+</div>
+<footer class="docs-footer"><span>Transcript Lake documentation</span><a href="https://github.com/wisent-ai/transcript-lake">GitHub ↗</a></footer>
+</div>
+  <script src="/script.js" defer></script>
+</body>
+</html>

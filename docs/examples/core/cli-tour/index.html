@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CLI tour — Transcript Lake</title>
+  <meta name="description" content="1. Goal: Use the installed executable for streaming, inspection, analytics, projection recovery, and safe reconstruction. 2. Risk: Streaming and labels mutate local Lake state; compaction and export mutate rebuildable projections. Oko and DuckDB are optional. ">
+  <meta name="theme-color" content="#07121a">
+  <meta property="og:title" content="CLI tour — Transcript Lake">
+  <meta property="og:description" content="1. Goal: Use the installed executable for streaming, inspection, analytics, projection recovery, and safe reconstruction. 2. Risk: Streaming and labels mutate local Lake state; compaction and export mutate rebuildable projections. Oko and DuckDB are optional. ">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://transcript-lake.wisent.com/docs/examples/core/cli-tour/">
+  <link rel="canonical" href="https://transcript-lake.wisent.com/docs/examples/core/cli-tour/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="ambient" aria-hidden="true"></div>
+  <div class="docs-shell">
+<header class="site-header">
+  <a class="brand" href="/" aria-label="Transcript Lake home"><span class="brand-mark" aria-hidden="true"><span>T</span>L</span><span class="brand-name">Transcript Lake</span></a>
+  <nav class="top-nav" aria-label="Primary navigation">
+    <a href="/docs/">Documentation</a>
+    <a href="https://github.com/wisent-ai/transcript-lake" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</header>
+<button class="docs-menu-button" type="button" aria-controls="docs-nav" aria-expanded="false">Browse topics</button>
+<div class="docs-layout">
+  <div id="docs-nav"><nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home-link" href="/docs/">Documentation home</a><section class="nav-group"><h2>Start here</h2><a href="/docs/what-is-transcript-lake/">What is Transcript Lake?</a><a href="/docs/quick-start/">Quick start: a synthetic local Lake</a><a href="/docs/onboarding/">Onboarding</a><a href="/docs/configuration/">Configuration reference</a></section><section class="nav-group"><h2>Understand</h2><a href="/docs/architecture/">Architecture</a><a href="/docs/core/">Core functionality contract</a><a href="/docs/lake/">Transcript Lake</a><a href="/docs/ingestion-reference/">Ingestion pipeline reference</a><a href="/docs/masking-guarantees/">Masking guarantees and limits</a></section><section class="nav-group"><h2>Concepts</h2><a href="/docs/concepts/cursor/">Concept: cursor and writer lease</a><a href="/docs/concepts/event/">Concept: canonical event</a><a href="/docs/concepts/export/">Concept: export and derived data</a><a href="/docs/concepts/label/">Concept: label</a><a href="/docs/concepts/masking/">Concept: masking</a><a href="/docs/concepts/partition/">Concept: partition</a><a href="/docs/concepts/runtime/">Concept: runtime and adapter</a><a href="/docs/concepts/session/">Concept: session</a></section><section class="nav-group"><h2>Operate</h2><a href="/docs/cli-reference/">CLI reference</a><a href="/docs/runbook/">Operator runbook</a><a href="/docs/integrations/">Integration contracts</a><a href="/docs/releases/">Release and versioning policy</a><a href="/docs/walkthrough-live-append/">Walkthrough: catch up and commit a synthetic live append</a><a href="/docs/walkthrough-masking-audit/">Walkthrough: audit synthetic masking and derived output</a></section><section class="nav-group"><h2>Examples</h2><a href="/docs/examples/">Transcript Lake examples</a><a href="/docs/examples/core/cli-tour/" aria-current="page" class="active">CLI tour</a><a href="/docs/examples/core/inspect-zero-state/">Inspect zero state and product identity</a><a href="/docs/examples/core/live-stream/">Keep a Lake current with the live stream</a><a href="/docs/examples/core/query-sessions/">Query cross-runtime sessions</a><a href="/docs/examples/core/restore-a-conversation/">Restore one conversation</a><a href="/docs/examples/failures/representative-failures/">Diagnose representative failures</a><a href="/docs/examples/getting-started/first-local-archive/">Create the first local archive</a><a href="/docs/examples/integrations/duckdb/cross-source-signals/">Query cross-source signals with Oko</a><a href="/docs/examples/integrations/oko/rebuild-oko/">Reconstruct the Oko projection</a><a href="/docs/examples/integrations/oko/reindex-oko/">Reindex Oko after projection changes</a><a href="/docs/examples/integrations/tama/import-hook-decisions/">Stream Tama hook decisions</a><a href="/docs/examples/operations/build-release-assets/">Build release assets</a><a href="/docs/examples/operations/compact-to-parquet/">Compact partitions to Parquet</a><a href="/docs/examples/operations/reset-and-uninstall/">Reset local state and uninstall</a><a href="/docs/examples/operations/upgrade-and-rollback/">Upgrade and roll back an exact release</a><a href="/docs/examples/recovery/rebuild-into-empty-root/">Rebuild into an empty root</a><a href="/docs/examples/synthetic/live-append/">Synthetic example: live append</a><a href="/docs/examples/synthetic/masking-audit/">Synthetic example: masking audit</a></section></nav></div>
+  <main class="docs-main" id="main">
+    <div class="article-layout">
+      <article class="doc-article">
+        <header class="article-header"><p class="eyebrow">Documentation / Examples</p><h1>CLI tour</h1><p>1. Goal: Use the installed executable for streaming, inspection, analytics, projection recovery, and safe reconstruction. 2. Risk: Streaming and labels mutate local Lake state; compaction and export mutate rebuildable projections. Oko and DuckDB are optional. </p></header>
+        <div class="article-content"><ol><li><strong>Goal:</strong> Use the installed executable for streaming, inspection, analytics, projection recovery, and safe reconstruction.</li><li><strong>Risk:</strong> Streaming and labels mutate local Lake state; compaction and export mutate rebuildable projections. Oko and DuckDB are optional.</li><li><strong>Environment:</strong> macOS, installed Transcript Lake, operator-owned state root; DuckDB <code>1.5.x</code> for analytics and compaction.</li><li><strong>Preconditions:</strong> No other writer owns the selected root; enough local disk; local runtime stores are optional.</li><li><strong>Inputs:</strong> One <code>LAKE</code> path, bounded read filters, and an optional Oko index.</li><li><strong>Side effects:</strong> Discovery and inspection write nothing. The stream writes masked partitions, affected Oko sessions, cursors, and live status. Labels append under <code>labels/</code>. Recovery writes a different empty root.</li><li><strong>Commands:</strong></li></ol>
+<div class="code-block"><div class="code-label">sh</div><pre><code>LAKE=&quot;/absolute/operator-owned/lake&quot;
+transcript-lake help
+transcript-lake help stream
+transcript-lake --version
+transcript-lake --data-dir &quot;$LAKE&quot; paths
+transcript-lake --data-dir &quot;$LAKE&quot; sources --json
+transcript-lake --data-dir &quot;$LAKE&quot; doctor
+transcript-lake --data-dir &quot;$LAKE&quot; status --json</code></pre></div>
+<p>Start <code>transcript-lake --data-dir &quot;$LAKE&quot; stream --json</code> in one terminal. In another terminal, inspect normalized evidence:</p>
+<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake --data-dir &quot;$LAKE&quot; sessions --limit 20
+transcript-lake --data-dir &quot;$LAKE&quot; events --type tool_call --limit 20
+transcript-lake --data-dir &quot;$LAKE&quot; search &quot;ssh&quot; --limit 20
+transcript-lake --data-dir &quot;$LAKE&quot; show &lt;session-id&gt;
+transcript-lake --data-dir &quot;$LAKE&quot; stats --days 7 --json
+transcript-lake --data-dir &quot;$LAKE&quot; hooks --decision block</code></pre></div>
+<p>Add operator labels without taking the stream writer lease:</p>
+<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake --data-dir &quot;$LAKE&quot; label add &lt;session-id&gt; --aspect reviewed --value yes --note &quot;human checked&quot;
+transcript-lake --data-dir &quot;$LAKE&quot; label list --aspect reviewed
+transcript-lake --data-dir &quot;$LAKE&quot; label aspects --json</code></pre></div>
+<p>Run optional derived operations while no stream commit is in flight:</p>
+<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake --data-dir &quot;$LAKE&quot; query &quot;SELECT * FROM tokens_daily ORDER BY day DESC&quot;
+transcript-lake --data-dir &quot;$LAKE&quot; signals --report freshness
+transcript-lake --data-dir &quot;$LAKE&quot; compact --source codex
+transcript-lake --data-dir &quot;$LAKE&quot; rebuild-oko --reindex
+transcript-lake --data-dir &quot;$LAKE&quot; clean --target all
+transcript-lake --data-dir &quot;$LAKE&quot; rebuild --to &quot;/absolute/operator-owned/lake-rebuild&quot;</code></pre></div>
+<p><code>clean</code> is a preview unless <code>--apply</code> is present. <code>rebuild</code> rejects the current or any non-empty target.</p>
+<ol><li><strong>Observable result:</strong> Read commands expose paths, sources, health, live state, and bounded evidence. The stream emits <code>start</code>, <code>commit</code>, source-local <code>failure</code>, and <code>stop</code> records without printing transcript payloads.</li><li><strong>Failure path:</strong> Invalid flags, duplicate flags, unsupported runtimes, corrupt authoritative metadata, writer conflicts, missing optional tools, and non-empty rebuild targets fail without rewriting vendor stores.</li><li><strong>Off-switch:</strong> Stop the foreground stream or unload its supervisor. Use <code>clean</code> only for rebuildable projections; authoritative Lake retention is independent.</li></ol></div>
+        <nav class="article-pagination" aria-label="Adjacent documentation"><a href="/docs/examples/"><small>Previous</small><span>← Transcript Lake examples</span></a><a class="next" href="/docs/examples/core/inspect-zero-state/"><small>Next</small><span>Inspect zero state and product identity →</span></a></nav>
+      </article>
+      
+    </div>
+  </main>
+</div>
+<footer class="docs-footer"><span>Transcript Lake documentation</span><a href="https://github.com/wisent-ai/transcript-lake">GitHub ↗</a></footer>
+</div>
+  <script src="/script.js" defer></script>
+</body>
+</html>

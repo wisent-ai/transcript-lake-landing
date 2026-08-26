@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Masking guarantees and limits — Transcript Lake</title>
+  <meta name="description" content="Masking is the boundary between adapter output and every durable Lake event. Adapters parse unmasked vendor records in memory; only the stream canonicalizer may write partitions or Oko projections.">
+  <meta name="theme-color" content="#07121a">
+  <meta property="og:title" content="Masking guarantees and limits — Transcript Lake">
+  <meta property="og:description" content="Masking is the boundary between adapter output and every durable Lake event. Adapters parse unmasked vendor records in memory; only the stream canonicalizer may write partitions or Oko projections.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://transcript-lake.wisent.com/docs/masking-guarantees/">
+  <link rel="canonical" href="https://transcript-lake.wisent.com/docs/masking-guarantees/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="ambient" aria-hidden="true"></div>
+  <div class="docs-shell">
+<header class="site-header">
+  <a class="brand" href="/" aria-label="Transcript Lake home"><span class="brand-mark" aria-hidden="true"><span>T</span>L</span><span class="brand-name">Transcript Lake</span></a>
+  <nav class="top-nav" aria-label="Primary navigation">
+    <a href="/docs/">Documentation</a>
+    <a href="https://github.com/wisent-ai/transcript-lake" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</header>
+<button class="docs-menu-button" type="button" aria-controls="docs-nav" aria-expanded="false">Browse topics</button>
+<div class="docs-layout">
+  <div id="docs-nav"><nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home-link" href="/docs/">Documentation home</a><section class="nav-group"><h2>Start here</h2><a href="/docs/what-is-transcript-lake/">What is Transcript Lake?</a><a href="/docs/quick-start/">Quick start: a synthetic local Lake</a><a href="/docs/onboarding/">Onboarding</a><a href="/docs/configuration/">Configuration reference</a></section><section class="nav-group"><h2>Understand</h2><a href="/docs/architecture/">Architecture</a><a href="/docs/core/">Core functionality contract</a><a href="/docs/lake/">Transcript Lake</a><a href="/docs/ingestion-reference/">Ingestion pipeline reference</a><a href="/docs/masking-guarantees/" aria-current="page" class="active">Masking guarantees and limits</a></section><section class="nav-group"><h2>Concepts</h2><a href="/docs/concepts/cursor/">Concept: cursor and writer lease</a><a href="/docs/concepts/event/">Concept: canonical event</a><a href="/docs/concepts/export/">Concept: export and derived data</a><a href="/docs/concepts/label/">Concept: label</a><a href="/docs/concepts/masking/">Concept: masking</a><a href="/docs/concepts/partition/">Concept: partition</a><a href="/docs/concepts/runtime/">Concept: runtime and adapter</a><a href="/docs/concepts/session/">Concept: session</a></section><section class="nav-group"><h2>Operate</h2><a href="/docs/cli-reference/">CLI reference</a><a href="/docs/runbook/">Operator runbook</a><a href="/docs/integrations/">Integration contracts</a><a href="/docs/releases/">Release and versioning policy</a><a href="/docs/walkthrough-live-append/">Walkthrough: catch up and commit a synthetic live append</a><a href="/docs/walkthrough-masking-audit/">Walkthrough: audit synthetic masking and derived output</a></section><section class="nav-group"><h2>Examples</h2><a href="/docs/examples/">Transcript Lake examples</a><a href="/docs/examples/core/cli-tour/">CLI tour</a><a href="/docs/examples/core/inspect-zero-state/">Inspect zero state and product identity</a><a href="/docs/examples/core/live-stream/">Keep a Lake current with the live stream</a><a href="/docs/examples/core/query-sessions/">Query cross-runtime sessions</a><a href="/docs/examples/core/restore-a-conversation/">Restore one conversation</a><a href="/docs/examples/failures/representative-failures/">Diagnose representative failures</a><a href="/docs/examples/getting-started/first-local-archive/">Create the first local archive</a><a href="/docs/examples/integrations/duckdb/cross-source-signals/">Query cross-source signals with Oko</a><a href="/docs/examples/integrations/oko/rebuild-oko/">Reconstruct the Oko projection</a><a href="/docs/examples/integrations/oko/reindex-oko/">Reindex Oko after projection changes</a><a href="/docs/examples/integrations/tama/import-hook-decisions/">Stream Tama hook decisions</a><a href="/docs/examples/operations/build-release-assets/">Build release assets</a><a href="/docs/examples/operations/compact-to-parquet/">Compact partitions to Parquet</a><a href="/docs/examples/operations/reset-and-uninstall/">Reset local state and uninstall</a><a href="/docs/examples/operations/upgrade-and-rollback/">Upgrade and roll back an exact release</a><a href="/docs/examples/recovery/rebuild-into-empty-root/">Rebuild into an empty root</a><a href="/docs/examples/synthetic/live-append/">Synthetic example: live append</a><a href="/docs/examples/synthetic/masking-audit/">Synthetic example: masking audit</a></section></nav></div>
+  <main class="docs-main" id="main">
+    <div class="article-layout">
+      <article class="doc-article">
+        <header class="article-header"><p class="eyebrow">Documentation / Understand</p><h1>Masking guarantees and limits</h1><p>Masking is the boundary between adapter output and every durable Lake event. Adapters parse unmasked vendor records in memory; only the stream canonicalizer may write partitions or Oko projections.</p></header>
+        <div class="article-content"><p>Masking is the boundary between adapter output and every durable Lake event. Adapters parse unmasked vendor records in memory; only the stream canonicalizer may write partitions or Oko projections.</p>
+<h2 id="what-never-leaves-the-masking-boundary">What never leaves the masking boundary<a class="heading-anchor" href="#what-never-leaves-the-masking-boundary" aria-label="Link to What never leaves the masking boundary">#</a></h2>
+<p>For a detected hit, none of the matched plaintext bytes, including a prefix or suffix, are written to <code>LAKE_DATA</code>. The complete hit becomes:</p>
+<div class="code-block"><div class="code-label">text</div><pre><code>[masked:&lt;class&gt;:&lt;character-count&gt;:&lt;sha256-prefix&gt;]</code></pre></div>
+<p>The fingerprint is the first eight lowercase hex characters of SHA-256 over the complete hit. It is deterministic and non-reversible, but permits equality correlation: the same secret produces the same marker fingerprint.</p>
+<p>Masking is applied in this order:</p>
+<ol><li><strong>assignment</strong> — <code>\b[A-Z][A-Z0-9_]{2,}=[A-Za-z0-9+/=_-]{16,}</code>; the complete name, equals sign, and value are removed.</li><li><strong>token</strong> — <code>\b[a-z]{2,7}-[A-Za-z0-9_-]{20,}</code>; the complete provider-shaped token is removed.</li><li><strong>entropy</strong> — candidate runs of at least 40 characters from <code>[A-Za-z0-9+/=_-]</code>, accepted only with at least 16 distinct characters and at least three of lowercase, uppercase, digit, and symbol groups.</li></ol>
+<p>Assignments run first so a whole <code>NAME=value</code> becomes one marker. Provider tokens run before the generic entropy rule. Existing markers cannot match the hit alphabets, making the transform idempotent.</p>
+<p>The stream applies the same transform to <code>text</code> and retained strings in <code>extra</code>, then caps each text/string value at 65,536 UTF-16 units and JSON nesting beyond depth four. Oversized Claude tool results are referenced, never followed. Kimi configuration and system-prompt records never contribute their text.</p>
+<h2 id="demonstrated-with-synthetic-evidence">Demonstrated with synthetic evidence<a class="heading-anchor" href="#demonstrated-with-synthetic-evidence" aria-label="Link to Demonstrated with synthetic evidence">#</a></h2>
+<p>The executed fixture produced:</p>
+<div class="code-block"><div class="code-label">text</div><pre><code>[masked:assignment:37:5be474f8]
+[masked:token:36:e3bebba1]
+[masked:entropy:44:d0fa7c09]</code></pre></div>
+<p>The same synthetic assignment appeared in both a user message and tool result with the same fingerprint. A literal scan for the three invented plaintext values returned zero matches throughout that isolated Lake, including the canonical partition and Oko export.</p>
+<h2 id="what-is-not-guaranteed">What is not guaranteed<a class="heading-anchor" href="#what-is-not-guaranteed" aria-label="Link to What is not guaranteed">#</a></h2>
+<p>Masking is pattern-based, not semantic secret detection and not anonymization.</p>
+<p>The following may remain:</p>
+<ul><li>ordinary prose and source code;</li><li>short passwords, tokens outside the supported alphabets, bearer strings without the documented shape, or secrets split by punctuation/whitespace;</li><li>timestamps, runtime, machine hostname, session id, absolute project path, event type, tool name, model, token counters, and selected source-specific metadata;</li><li>the marker class, original character count, and stable equality fingerprint;</li><li>operator labels and notes. Labels are a separate append-only operator store and are not passed through the event masker.</li></ul>
+<p>Therefore:</p>
+<ul><li>Treat all Lake roots as sensitive local data.</li><li>Never publish a Lake based only on the word “masked.”</li><li>Rotate any credential pasted into a transcript; masking the archive does not revoke it.</li><li>Use synthetic fixtures for documentation, demonstrations, bug reports, and qualification.</li></ul>
+<h2 id="durability-relationship">Durability relationship<a class="heading-anchor" href="#durability-relationship" aria-label="Link to Durability relationship">#</a></h2>
+<p>The writer lease covers partition append, affected Oko session projection, and cursor checkpoint. The cursor cannot advance ahead of durable masked output. A failure before checkpoint causes replay rather than skipped source bytes. Hook closed segments use temp-file write, file <code>fsync</code>, rename, and parent-directory <code>fsync</code>; normal transcript partitions append complete event batches, and cursor publication is atomic.</p>
+<p>See <a href="/docs/concepts/masking/">masking concept</a>, <a href="/docs/ingestion-reference/">ingestion reference</a>, and <a href="/docs/runbook/">runbook</a>.</p></div>
+        <nav class="article-pagination" aria-label="Adjacent documentation"><a href="/docs/ingestion-reference/"><small>Previous</small><span>← Ingestion pipeline reference</span></a><a class="next" href="/docs/concepts/cursor/"><small>Next</small><span>Concept: cursor and writer lease →</span></a></nav>
+      </article>
+      <aside class="page-toc" aria-label="On this page"><strong>On this page</strong><a href="#what-never-leaves-the-masking-boundary" class="toc-level-2">What never leaves the masking boundary</a><a href="#demonstrated-with-synthetic-evidence" class="toc-level-2">Demonstrated with synthetic evidence</a><a href="#what-is-not-guaranteed" class="toc-level-2">What is not guaranteed</a><a href="#durability-relationship" class="toc-level-2">Durability relationship</a></aside>
+    </div>
+  </main>
+</div>
+<footer class="docs-footer"><span>Transcript Lake documentation</span><a href="https://github.com/wisent-ai/transcript-lake">GitHub ↗</a></footer>
+</div>
+  <script src="/script.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>What is Transcript Lake? — Transcript Lake</title>
+  <meta name="description" content="Transcript Lake is the local, privacy-masked canonical archive for coding-agent conversations. It reads supported vendor transcript stores without modifying them, normalizes their records into one event schema, masks credential-shaped text before durable outpu">
+  <meta name="theme-color" content="#07121a">
+  <meta property="og:title" content="What is Transcript Lake? — Transcript Lake">
+  <meta property="og:description" content="Transcript Lake is the local, privacy-masked canonical archive for coding-agent conversations. It reads supported vendor transcript stores without modifying them, normalizes their records into one event schema, masks credential-shaped text before durable outpu">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://transcript-lake.wisent.com/docs/what-is-transcript-lake/">
+  <link rel="canonical" href="https://transcript-lake.wisent.com/docs/what-is-transcript-lake/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="ambient" aria-hidden="true"></div>
+  <div class="docs-shell">
+<header class="site-header">
+  <a class="brand" href="/" aria-label="Transcript Lake home"><span class="brand-mark" aria-hidden="true"><span>T</span>L</span><span class="brand-name">Transcript Lake</span></a>
+  <nav class="top-nav" aria-label="Primary navigation">
+    <a href="/docs/">Documentation</a>
+    <a href="https://github.com/wisent-ai/transcript-lake" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</header>
+<button class="docs-menu-button" type="button" aria-controls="docs-nav" aria-expanded="false">Browse topics</button>
+<div class="docs-layout">
+  <div id="docs-nav"><nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home-link" href="/docs/">Documentation home</a><section class="nav-group"><h2>Start here</h2><a href="/docs/what-is-transcript-lake/" aria-current="page" class="active">What is Transcript Lake?</a><a href="/docs/quick-start/">Quick start: a synthetic local Lake</a><a href="/docs/onboarding/">Onboarding</a><a href="/docs/configuration/">Configuration reference</a></section><section class="nav-group"><h2>Understand</h2><a href="/docs/architecture/">Architecture</a><a href="/docs/core/">Core functionality contract</a><a href="/docs/lake/">Transcript Lake</a><a href="/docs/ingestion-reference/">Ingestion pipeline reference</a><a href="/docs/masking-guarantees/">Masking guarantees and limits</a></section><section class="nav-group"><h2>Concepts</h2><a href="/docs/concepts/cursor/">Concept: cursor and writer lease</a><a href="/docs/concepts/event/">Concept: canonical event</a><a href="/docs/concepts/export/">Concept: export and derived data</a><a href="/docs/concepts/label/">Concept: label</a><a href="/docs/concepts/masking/">Concept: masking</a><a href="/docs/concepts/partition/">Concept: partition</a><a href="/docs/concepts/runtime/">Concept: runtime and adapter</a><a href="/docs/concepts/session/">Concept: session</a></section><section class="nav-group"><h2>Operate</h2><a href="/docs/cli-reference/">CLI reference</a><a href="/docs/runbook/">Operator runbook</a><a href="/docs/integrations/">Integration contracts</a><a href="/docs/releases/">Release and versioning policy</a><a href="/docs/walkthrough-live-append/">Walkthrough: catch up and commit a synthetic live append</a><a href="/docs/walkthrough-masking-audit/">Walkthrough: audit synthetic masking and derived output</a></section><section class="nav-group"><h2>Examples</h2><a href="/docs/examples/">Transcript Lake examples</a><a href="/docs/examples/core/cli-tour/">CLI tour</a><a href="/docs/examples/core/inspect-zero-state/">Inspect zero state and product identity</a><a href="/docs/examples/core/live-stream/">Keep a Lake current with the live stream</a><a href="/docs/examples/core/query-sessions/">Query cross-runtime sessions</a><a href="/docs/examples/core/restore-a-conversation/">Restore one conversation</a><a href="/docs/examples/failures/representative-failures/">Diagnose representative failures</a><a href="/docs/examples/getting-started/first-local-archive/">Create the first local archive</a><a href="/docs/examples/integrations/duckdb/cross-source-signals/">Query cross-source signals with Oko</a><a href="/docs/examples/integrations/oko/rebuild-oko/">Reconstruct the Oko projection</a><a href="/docs/examples/integrations/oko/reindex-oko/">Reindex Oko after projection changes</a><a href="/docs/examples/integrations/tama/import-hook-decisions/">Stream Tama hook decisions</a><a href="/docs/examples/operations/build-release-assets/">Build release assets</a><a href="/docs/examples/operations/compact-to-parquet/">Compact partitions to Parquet</a><a href="/docs/examples/operations/reset-and-uninstall/">Reset local state and uninstall</a><a href="/docs/examples/operations/upgrade-and-rollback/">Upgrade and roll back an exact release</a><a href="/docs/examples/recovery/rebuild-into-empty-root/">Rebuild into an empty root</a><a href="/docs/examples/synthetic/live-append/">Synthetic example: live append</a><a href="/docs/examples/synthetic/masking-audit/">Synthetic example: masking audit</a></section></nav></div>
+  <main class="docs-main" id="main">
+    <div class="article-layout">
+      <article class="doc-article">
+        <header class="article-header"><p class="eyebrow">Documentation / Start here</p><h1>What is Transcript Lake?</h1><p>Transcript Lake is the local, privacy-masked canonical archive for coding-agent conversations. It reads supported vendor transcript stores without modifying them, normalizes their records into one event schema, masks credential-shaped text before durable outpu</p></header>
+        <div class="article-content"><p>Transcript Lake is the local, privacy-masked canonical archive for coding-agent conversations. It reads supported vendor transcript stores without modifying them, normalizes their records into one event schema, masks credential-shaped text before durable output, and keeps append-only daily NDJSON partitions that can be queried through DuckDB.</p>
+<p>It is useful when one machine has conversations in Claude Code, Codex, omp, Factory Droid, Kimi, and Tama hook telemetry and the operator needs one inspectable history instead of six vendor-specific formats.</p>
+<h2 id="the-four-owner-boundary">The four-owner boundary<a class="heading-anchor" href="#the-four-owner-boundary" aria-label="Link to The four-owner boundary">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>Owner</th><th>Owns</th><th>Relationship to the Lake</th></tr></thead><tbody><tr><td>Vendor runtimes</td><td>Raw transcript stores on disk</td><td>Transcript Lake reads them; it never rewrites, migrates, adopts, or deletes them.</td></tr><tr><td>Transcript Lake</td><td>Masked canonical partitions, durable cursors, and <code>exports/oko</code></td><td>This repository defines and writes these artifacts.</td></tr><tr><td>Oko</td><td>Its merged catalogue, rebuildable search projection, sessions its broker started, and Oko bookkeeping</td><td>Oko scans the Lake export read-only. It does not mask transcripts or write under <code>LAKE_DATA</code>.</td></tr><tr><td>Oko Desktop</td><td>Native application lifecycle and UI</td><td>It consumes Oko; it replaces neither Transcript Lake nor the Oko executables.</td></tr></tbody></table></div>
+<p>The boundary is operational: deleting a vendor store destroys vendor-owned history; deleting Lake partitions destroys the canonical masked archive; deleting an Oko catalogue removes a rebuildable index, not the archive.</p>
+<h2 id="what-it-does">What it does<a class="heading-anchor" href="#what-it-does" aria-label="Link to What it does">#</a></h2>
+<ol><li>Discovers supported transcript roots under the current <code>HOME</code>.</li><li>Watches existing roots and catches up from newline-aligned byte cursors.</li><li>Parses vendor records into provider-neutral raw events.</li><li>Applies the single masking boundary to <code>text</code> and retained string data.</li><li>Caps retained values and writes canonical events to daily runtime partitions.</li><li>Materializes the affected per-session Oko export.</li><li>Advances the source cursor only after durable outputs succeed.</li><li>Exposes bounded read commands, DuckDB views, labels, Parquet mirrors, and recovery replay.</li></ol>
+<h2 id="what-it-does-not-do">What it does not do<a class="heading-anchor" href="#what-it-does-not-do" aria-label="Link to What it does not do">#</a></h2>
+<ul><li>It does not own or mutate raw transcripts.</li><li>It does not promise anonymization. Project paths, timestamps, session identifiers, model names, tool names, machine identity, short secrets outside the documented patterns, and ordinary conversation text can remain sensitive.</li><li>It does not route model calls, own provider credentials, or manage remote retained history.</li><li>It does not make Oko the archive. <code>exports/oko</code> is a rebuildable projection of the Lake.</li><li>It does not automatically delete authoritative events or individual records.</li><li>It does not support Gemini or Qwen transcript adapters in this revision.</li></ul>
+<h2 id="start-here">Start here<a class="heading-anchor" href="#start-here" aria-label="Link to Start here">#</a></h2>
+<ul><li><a href="/docs/quick-start/">Executed quick start</a></li><li><a href="/docs/concepts/event/">Core concepts</a></li><li><a href="/docs/cli-reference/">CLI reference</a></li><li><a href="/docs/masking-guarantees/">Masking guarantees</a></li><li><a href="/docs/runbook/">Runbook</a></li><li><a href="/docs/examples/">Examples catalogue</a></li></ul>
+<p>The existing <a href="/docs/lake/">data contract</a>, <a href="/docs/core/">core contract</a>, <a href="/docs/integrations/">integration contracts</a>, <a href="/docs/onboarding/">onboarding guide</a>, and <a href="/docs/releases/">release policy</a> remain normative.</p></div>
+        <nav class="article-pagination" aria-label="Adjacent documentation"><a class="next" href="/docs/quick-start/"><small>Next</small><span>Quick start: a synthetic local Lake →</span></a></nav>
+      </article>
+      <aside class="page-toc" aria-label="On this page"><strong>On this page</strong><a href="#the-four-owner-boundary" class="toc-level-2">The four-owner boundary</a><a href="#what-it-does" class="toc-level-2">What it does</a><a href="#what-it-does-not-do" class="toc-level-2">What it does not do</a><a href="#start-here" class="toc-level-2">Start here</a></aside>
+    </div>
+  </main>
+</div>
+<footer class="docs-footer"><span>Transcript Lake documentation</span><a href="https://github.com/wisent-ai/transcript-lake">GitHub ↗</a></footer>
+</div>
+  <script src="/script.js" defer></script>
+</body>
+</html>

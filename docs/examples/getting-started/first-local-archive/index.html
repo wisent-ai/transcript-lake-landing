@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create the first local archive — Transcript Lake</title>
+  <meta name="description" content="1. Goal: Install the development build, start the stream, and observe its masked Lake inventory. 2. Risk: Local mutation and provider-facing read. No network or credential use after installation. 3. Environment: macOS, local user account, isolated terminal, re">
+  <meta name="theme-color" content="#07121a">
+  <meta property="og:title" content="Create the first local archive — Transcript Lake">
+  <meta property="og:description" content="1. Goal: Install the development build, start the stream, and observe its masked Lake inventory. 2. Risk: Local mutation and provider-facing read. No network or credential use after installation. 3. Environment: macOS, local user account, isolated terminal, re">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://transcript-lake.wisent.com/docs/examples/getting-started/first-local-archive/">
+  <link rel="canonical" href="https://transcript-lake.wisent.com/docs/examples/getting-started/first-local-archive/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="ambient" aria-hidden="true"></div>
+  <div class="docs-shell">
+<header class="site-header">
+  <a class="brand" href="/" aria-label="Transcript Lake home"><span class="brand-mark" aria-hidden="true"><span>T</span>L</span><span class="brand-name">Transcript Lake</span></a>
+  <nav class="top-nav" aria-label="Primary navigation">
+    <a href="/docs/">Documentation</a>
+    <a href="https://github.com/wisent-ai/transcript-lake" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</header>
+<button class="docs-menu-button" type="button" aria-controls="docs-nav" aria-expanded="false">Browse topics</button>
+<div class="docs-layout">
+  <div id="docs-nav"><nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home-link" href="/docs/">Documentation home</a><section class="nav-group"><h2>Start here</h2><a href="/docs/what-is-transcript-lake/">What is Transcript Lake?</a><a href="/docs/quick-start/">Quick start: a synthetic local Lake</a><a href="/docs/onboarding/">Onboarding</a><a href="/docs/configuration/">Configuration reference</a></section><section class="nav-group"><h2>Understand</h2><a href="/docs/architecture/">Architecture</a><a href="/docs/core/">Core functionality contract</a><a href="/docs/lake/">Transcript Lake</a><a href="/docs/ingestion-reference/">Ingestion pipeline reference</a><a href="/docs/masking-guarantees/">Masking guarantees and limits</a></section><section class="nav-group"><h2>Concepts</h2><a href="/docs/concepts/cursor/">Concept: cursor and writer lease</a><a href="/docs/concepts/event/">Concept: canonical event</a><a href="/docs/concepts/export/">Concept: export and derived data</a><a href="/docs/concepts/label/">Concept: label</a><a href="/docs/concepts/masking/">Concept: masking</a><a href="/docs/concepts/partition/">Concept: partition</a><a href="/docs/concepts/runtime/">Concept: runtime and adapter</a><a href="/docs/concepts/session/">Concept: session</a></section><section class="nav-group"><h2>Operate</h2><a href="/docs/cli-reference/">CLI reference</a><a href="/docs/runbook/">Operator runbook</a><a href="/docs/integrations/">Integration contracts</a><a href="/docs/releases/">Release and versioning policy</a><a href="/docs/walkthrough-live-append/">Walkthrough: catch up and commit a synthetic live append</a><a href="/docs/walkthrough-masking-audit/">Walkthrough: audit synthetic masking and derived output</a></section><section class="nav-group"><h2>Examples</h2><a href="/docs/examples/">Transcript Lake examples</a><a href="/docs/examples/core/cli-tour/">CLI tour</a><a href="/docs/examples/core/inspect-zero-state/">Inspect zero state and product identity</a><a href="/docs/examples/core/live-stream/">Keep a Lake current with the live stream</a><a href="/docs/examples/core/query-sessions/">Query cross-runtime sessions</a><a href="/docs/examples/core/restore-a-conversation/">Restore one conversation</a><a href="/docs/examples/failures/representative-failures/">Diagnose representative failures</a><a href="/docs/examples/getting-started/first-local-archive/" aria-current="page" class="active">Create the first local archive</a><a href="/docs/examples/integrations/duckdb/cross-source-signals/">Query cross-source signals with Oko</a><a href="/docs/examples/integrations/oko/rebuild-oko/">Reconstruct the Oko projection</a><a href="/docs/examples/integrations/oko/reindex-oko/">Reindex Oko after projection changes</a><a href="/docs/examples/integrations/tama/import-hook-decisions/">Stream Tama hook decisions</a><a href="/docs/examples/operations/build-release-assets/">Build release assets</a><a href="/docs/examples/operations/compact-to-parquet/">Compact partitions to Parquet</a><a href="/docs/examples/operations/reset-and-uninstall/">Reset local state and uninstall</a><a href="/docs/examples/operations/upgrade-and-rollback/">Upgrade and roll back an exact release</a><a href="/docs/examples/recovery/rebuild-into-empty-root/">Rebuild into an empty root</a><a href="/docs/examples/synthetic/live-append/">Synthetic example: live append</a><a href="/docs/examples/synthetic/masking-audit/">Synthetic example: masking audit</a></section></nav></div>
+  <main class="docs-main" id="main">
+    <div class="article-layout">
+      <article class="doc-article">
+        <header class="article-header"><p class="eyebrow">Documentation / Examples</p><h1>Create the first local archive</h1><p>1. Goal: Install the development build, start the stream, and observe its masked Lake inventory. 2. Risk: Local mutation and provider-facing read. No network or credential use after installation. 3. Environment: macOS, local user account, isolated terminal, re</p></header>
+        <div class="article-content"><ol><li><strong>Goal:</strong> Install the development build, start the stream, and observe its masked Lake inventory.</li><li><strong>Risk:</strong> Local mutation and provider-facing read. No network or credential use after installation.</li><li><strong>Environment:</strong> macOS, local user account, isolated terminal, repository checkout.</li><li><strong>Preconditions:</strong> Rust <code>1.85</code> or newer, a writable operator-owned path, no other writer using that path, and optional local agent sessions.</li><li><strong>Inputs:</strong> One absolute <code>LAKE_DATA</code>; this example uses a temporary directory.</li><li><strong>Artifacts and side effects:</strong> Installs one executable into <code>~/.cargo/bin</code>; writes cursors, masked partitions, live stream state, and Oko projection files beneath the selected root. Vendor stores are read-only.</li><li><strong>Steps:</strong></li></ol>
+<div class="code-block"><div class="code-label">sh</div><pre><code>git clone https://github.com/wisent-ai/transcript-lake.git
+cd transcript-lake
+cargo install --path .
+LAKE=&quot;$(mktemp -d)/lake&quot;
+transcript-lake
+transcript-lake --data-dir &quot;$LAKE&quot; paths
+transcript-lake --data-dir &quot;$LAKE&quot; sources
+transcript-lake --data-dir &quot;$LAKE&quot; doctor
+transcript-lake --data-dir &quot;$LAKE&quot; stream --json</code></pre></div>
+<p>While the stream remains open, use another terminal:</p>
+<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake --data-dir &quot;$LAKE&quot; status
+transcript-lake --data-dir &quot;$LAKE&quot; sessions --limit 10
+transcript-lake --data-dir &quot;$LAKE&quot; stats --days 7</code></pre></div>
+<ol><li><strong>Observable result:</strong> The first invocation prints purpose and safe commands without creating the selected root. The stream prints one <code>start</code> record, source activity produces <code>commit</code> records, and status reports the live process plus durable cursors.</li><li><strong>Failure path:</strong> A fatal startup or authoritative-state error exits non-zero. A source-local failure is named in the stream log and leaves that source cursor unchanged. Preserve the root and use <a href="/docs/examples/failures/representative-failures/">representative failures</a>.</li><li><strong>Off-switch:</strong> Stop the foreground process with SIGINT or SIGTERM. The executable and Lake data remain independent.</li><li><strong>Related operations:</strong> Continue with the <a href="/docs/examples/core/live-stream/">live stream</a> or <a href="/docs/examples/core/query-sessions/">query sessions</a>.</li></ol></div>
+        <nav class="article-pagination" aria-label="Adjacent documentation"><a href="/docs/examples/failures/representative-failures/"><small>Previous</small><span>← Diagnose representative failures</span></a><a class="next" href="/docs/examples/integrations/duckdb/cross-source-signals/"><small>Next</small><span>Query cross-source signals with Oko →</span></a></nav>
+      </article>
+      
+    </div>
+  </main>
+</div>
+<footer class="docs-footer"><span>Transcript Lake documentation</span><a href="https://github.com/wisent-ai/transcript-lake">GitHub ↗</a></footer>
+</div>
+  <script src="/script.js" defer></script>
+</body>
+</html>

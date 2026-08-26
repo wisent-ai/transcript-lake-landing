@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Onboarding — Transcript Lake</title>
+  <meta name="description" content="This guide moves a new operator from a clean macOS environment to the first observable Transcript Lake result. Core streaming is local, requires no account or credential, and never modifies vendor transcript stores.">
+  <meta name="theme-color" content="#07121a">
+  <meta property="og:title" content="Onboarding — Transcript Lake">
+  <meta property="og:description" content="This guide moves a new operator from a clean macOS environment to the first observable Transcript Lake result. Core streaming is local, requires no account or credential, and never modifies vendor transcript stores.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://transcript-lake.wisent.com/docs/onboarding/">
+  <link rel="canonical" href="https://transcript-lake.wisent.com/docs/onboarding/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="ambient" aria-hidden="true"></div>
+  <div class="docs-shell">
+<header class="site-header">
+  <a class="brand" href="/" aria-label="Transcript Lake home"><span class="brand-mark" aria-hidden="true"><span>T</span>L</span><span class="brand-name">Transcript Lake</span></a>
+  <nav class="top-nav" aria-label="Primary navigation">
+    <a href="/docs/">Documentation</a>
+    <a href="https://github.com/wisent-ai/transcript-lake" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</header>
+<button class="docs-menu-button" type="button" aria-controls="docs-nav" aria-expanded="false">Browse topics</button>
+<div class="docs-layout">
+  <div id="docs-nav"><nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home-link" href="/docs/">Documentation home</a><section class="nav-group"><h2>Start here</h2><a href="/docs/what-is-transcript-lake/">What is Transcript Lake?</a><a href="/docs/quick-start/">Quick start: a synthetic local Lake</a><a href="/docs/onboarding/" aria-current="page" class="active">Onboarding</a><a href="/docs/configuration/">Configuration reference</a></section><section class="nav-group"><h2>Understand</h2><a href="/docs/architecture/">Architecture</a><a href="/docs/core/">Core functionality contract</a><a href="/docs/lake/">Transcript Lake</a><a href="/docs/ingestion-reference/">Ingestion pipeline reference</a><a href="/docs/masking-guarantees/">Masking guarantees and limits</a></section><section class="nav-group"><h2>Concepts</h2><a href="/docs/concepts/cursor/">Concept: cursor and writer lease</a><a href="/docs/concepts/event/">Concept: canonical event</a><a href="/docs/concepts/export/">Concept: export and derived data</a><a href="/docs/concepts/label/">Concept: label</a><a href="/docs/concepts/masking/">Concept: masking</a><a href="/docs/concepts/partition/">Concept: partition</a><a href="/docs/concepts/runtime/">Concept: runtime and adapter</a><a href="/docs/concepts/session/">Concept: session</a></section><section class="nav-group"><h2>Operate</h2><a href="/docs/cli-reference/">CLI reference</a><a href="/docs/runbook/">Operator runbook</a><a href="/docs/integrations/">Integration contracts</a><a href="/docs/releases/">Release and versioning policy</a><a href="/docs/walkthrough-live-append/">Walkthrough: catch up and commit a synthetic live append</a><a href="/docs/walkthrough-masking-audit/">Walkthrough: audit synthetic masking and derived output</a></section><section class="nav-group"><h2>Examples</h2><a href="/docs/examples/">Transcript Lake examples</a><a href="/docs/examples/core/cli-tour/">CLI tour</a><a href="/docs/examples/core/inspect-zero-state/">Inspect zero state and product identity</a><a href="/docs/examples/core/live-stream/">Keep a Lake current with the live stream</a><a href="/docs/examples/core/query-sessions/">Query cross-runtime sessions</a><a href="/docs/examples/core/restore-a-conversation/">Restore one conversation</a><a href="/docs/examples/failures/representative-failures/">Diagnose representative failures</a><a href="/docs/examples/getting-started/first-local-archive/">Create the first local archive</a><a href="/docs/examples/integrations/duckdb/cross-source-signals/">Query cross-source signals with Oko</a><a href="/docs/examples/integrations/oko/rebuild-oko/">Reconstruct the Oko projection</a><a href="/docs/examples/integrations/oko/reindex-oko/">Reindex Oko after projection changes</a><a href="/docs/examples/integrations/tama/import-hook-decisions/">Stream Tama hook decisions</a><a href="/docs/examples/operations/build-release-assets/">Build release assets</a><a href="/docs/examples/operations/compact-to-parquet/">Compact partitions to Parquet</a><a href="/docs/examples/operations/reset-and-uninstall/">Reset local state and uninstall</a><a href="/docs/examples/operations/upgrade-and-rollback/">Upgrade and roll back an exact release</a><a href="/docs/examples/recovery/rebuild-into-empty-root/">Rebuild into an empty root</a><a href="/docs/examples/synthetic/live-append/">Synthetic example: live append</a><a href="/docs/examples/synthetic/masking-audit/">Synthetic example: masking audit</a></section></nav></div>
+  <main class="docs-main" id="main">
+    <div class="article-layout">
+      <article class="doc-article">
+        <header class="article-header"><p class="eyebrow">Documentation / Start here</p><h1>Onboarding</h1><p>This guide moves a new operator from a clean macOS environment to the first observable Transcript Lake result. Core streaming is local, requires no account or credential, and never modifies vendor transcript stores.</p></header>
+        <div class="article-content"><p>This guide moves a new operator from a clean macOS environment to the first observable Transcript Lake result. Core streaming is local, requires no account or credential, and never modifies vendor transcript stores.</p>
+<h2 id="choose-the-channel">Choose the channel<a class="heading-anchor" href="#choose-the-channel" aria-label="Link to Choose the channel">#</a></h2>
+<ul><li><strong>Development:</strong> source checkout from <code>main</code>; mutable and unsupported for production.</li><li><strong>Preview or stable:</strong> an exact <code>v&lt;version&gt;</code> GitHub release archive, checksum, and provenance record. No preview or stable release currently exists.</li></ul>
+<p>Do not treat a <code>main</code> archive as an immutable release.</p>
+<h2 id="prerequisites">Prerequisites<a class="heading-anchor" href="#prerequisites" aria-label="Link to Prerequisites">#</a></h2>
+<h3 id="required-for-every-installation">Required for every installation<a class="heading-anchor" href="#required-for-every-installation" aria-label="Link to Required for every installation">#</a></h3>
+<ul><li>macOS.</li><li>A Rust toolchain (<code>cargo</code> and <code>rustc</code>) at version <code>1.85</code> or newer, to build the CLI. Running the built binary needs nothing else.</li><li>Local read permission for at least one supported transcript store if you expect non-empty streaming.</li><li>Writable local storage for <code>LAKE_DATA</code>.</li></ul>
+<p>Check:</p>
+<div class="code-block"><div class="code-label">sh</div><pre><code>uname -s
+cargo --version
+printf &#x27;%s\n&#x27; &quot;${LAKE_DATA:-$HOME/.transcript-lake}&quot;</code></pre></div>
+<p>Expected: <code>Darwin</code>, a cargo version of <code>1.85</code> or newer, and the intended local state path.</p>
+<h3 id="required-only-for-sql-and-compaction">Required only for SQL and compaction<a class="heading-anchor" href="#required-only-for-sql-and-compaction" aria-label="Link to Required only for SQL and compaction">#</a></h3>
+<ul><li>DuckDB CLI <code>1.5.x</code> available as <code>duckdb</code>.</li></ul>
+<div class="code-block"><div class="code-label">sh</div><pre><code>duckdb --version</code></pre></div>
+<p>A missing DuckDB binary does not prevent streaming, status, masking, or Oko projection.</p>
+<h3 id="required-only-for-oko-integration">Required only for Oko integration<a class="heading-anchor" href="#required-only-for-oko-integration" aria-label="Link to Required only for Oko integration">#</a></h3>
+<ul><li>A compatible <code>oko-cli</code> on <code>PATH</code>, or <code>OKO_CLI</code> set to its executable path.</li></ul>
+<div class="code-block"><div class="code-label">sh</div><pre><code>command -v &quot;${OKO_CLI:-oko-cli}&quot;</code></pre></div>
+<p>Oko is optional. Its absence must not prevent core streaming.</p>
+<h2 id="install-an-immutable-release">Install an immutable release<a class="heading-anchor" href="#install-an-immutable-release" aria-label="Link to Install an immutable release">#</a></h2>
+<p>This is the normal-user installation path after a preview or stable release exists. Select an exact version from <a href="https://github.com/wisent-ai/transcript-lake/releases" target="_blank" rel="noreferrer">GitHub Releases</a>; never substitute <code>latest</code> for <code>VERSION</code>.</p>
+<div class="code-block"><div class="code-label">sh</div><pre><code>VERSION=&#x27;&lt;exact-version&gt;&#x27;
+ASSET=&#x27;&lt;exact-asset-name&gt;&#x27;
+BASE=&quot;https://github.com/wisent-ai/transcript-lake/releases/download/v$VERSION&quot;
+curl --fail --location --remote-name &quot;$BASE/$ASSET&quot;
+curl --fail --location --remote-name &quot;$BASE/$ASSET.sha256&quot;
+shasum --algorithm 256 --check &quot;$ASSET.sha256&quot;
+tar -xzf &quot;$ASSET&quot;
+mkdir -p &quot;$HOME/.local/bin&quot;
+install -m 755 &quot;${ASSET%.tar.gz}/transcript-lake&quot; &quot;$HOME/.local/bin/transcript-lake&quot;
+transcript-lake --version</code></pre></div>
+<p><code>ASSET</code> is the archive on the release page whose architecture matches <code>uname -m</code>; the release publishes one binary archive per supported macOS architecture.</p>
+<p>Expected: checksum verification reports <code>OK</code>; the final command prints exactly <code>VERSION</code>. Installation does not create <code>LAKE_DATA</code>, contact coding-agent services, or request elevated privileges unless the selected install directory itself requires them.</p>
+<p>No immutable release currently exists, so these commands intentionally require an operator-selected real release version rather than inventing one.</p>
+<h2 id="development-installation">Development installation<a class="heading-anchor" href="#development-installation" aria-label="Link to Development installation">#</a></h2>
+<p>Maintainers may install from the public source tree:</p>
+<div class="code-block"><div class="code-label">sh</div><pre><code>git clone https://github.com/wisent-ai/transcript-lake.git
+cd transcript-lake
+cargo install --path .
+transcript-lake --version</code></pre></div>
+<p><code>cargo install</code> places the binary in <code>~/.cargo/bin</code>, which must be on <code>PATH</code>. To build without installing, run <code>cargo build --release</code> and invoke <code>target/release/transcript-lake</code> directly.</p>
+<p>This selects mutable development source and is not a production release coordinate.</p>
+<h2 id="zero-state">Zero state<a class="heading-anchor" href="#zero-state" aria-label="Link to Zero state">#</a></h2>
+<p>Run without arguments before choosing a data path:</p>
+<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake</code></pre></div>
+<p>Expected: purpose, safe starting commands, global flags, default state path, and a help URL. This command must not create files, read transcript stores, contact external services, or start background work.</p>
+<h2 id="minimum-configuration">Minimum configuration<a class="heading-anchor" href="#minimum-configuration" aria-label="Link to Minimum configuration">#</a></h2>
+<p>Transcript Lake defaults to <code>~/.transcript-lake</code>. Select another root for one invocation without editing shell configuration:</p>
+<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake --data-dir &quot;$HOME/.transcript-lake&quot; paths</code></pre></div>
+<p>Automation may instead set <code>LAKE_DATA</code>. Global <code>--data-dir</code> wins for that process. Use an operator-owned local path; Transcript Lake does not edit shell profiles.</p>
+<p>There are no core credentials. <code>OKO_CLI</code> is optional and needed only when asking Transcript Lake to invoke Oko.</p>
+<h2 id="first-successful-workflow">First successful workflow<a class="heading-anchor" href="#first-successful-workflow" aria-label="Link to First successful workflow">#</a></h2>
+<h3 id="starting-state">Starting state<a class="heading-anchor" href="#starting-state" aria-label="Link to Starting state">#</a></h3>
+<ul><li>Transcript Lake is installed.</li><li><code>LAKE_DATA</code> identifies a directory the operator owns.</li><li>No Transcript Lake stream or other writer is using that directory.</li><li>Zero or more supported coding-agent stores may exist under the current user's home directory.</li></ul>
+<h3 id="inspect-without-mutation">Inspect without mutation<a class="heading-anchor" href="#inspect-without-mutation" aria-label="Link to Inspect without mutation">#</a></h3>
+<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake paths
+transcript-lake sources
+transcript-lake doctor
+transcript-lake status</code></pre></div>
+<p>Expected on a clean setup: resolved paths, zero or more discovered runtime stores, optional-dependency warnings rather than core failure, an absent healthy zero-state, no partitions, no cursors, and no live stream. The Oko freshness line may report that no index or projection exists.</p>
+<p>All four commands are read-only. <code>doctor</code> exits non-zero only for corrupt authoritative metadata or a broken installed adapter; missing DuckDB/Oko and absent source stores are warnings.</p>
+<h3 id="start-the-stream">Start the stream<a class="heading-anchor" href="#start-the-stream" aria-label="Link to Start the stream">#</a></h3>
+<p>Run in the foreground:</p>
+<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake stream</code></pre></div>
+<p>The process recursively watches every supported source root. A source append is read directly from its durable byte cursor, masked, committed to canonical partitions and the affected Oko session projection, and then checkpointed. There is no scan interval, timer, or refresh subprocess.</p>
+<p>For an always-on development installation from the source checkout:</p>
+<div class="code-block"><div class="code-label">sh</div><pre><code>scripts/install-stream-service.sh</code></pre></div>
+<p>The script installs the release-profile binary outside <code>~/Documents</code>, removes the obsolete timer/watch LaunchAgents, and loads one KeepAlive LaunchAgent named <code>com.wisent.transcript-lake-stream</code>. Its combined structured log is <code>~/Library/Logs/transcript-lake-stream.log</code>.</p>
+<p>Side effects remain inside the selected <code>LAKE_DATA</code>: cursors, masked NDJSON partitions, stream status, and Oko session projections. Vendor stores remain unchanged, and the stream makes no network request.</p>
+<h3 id="observe-and-use-the-result">Observe and use the result<a class="heading-anchor" href="#observe-and-use-the-result" aria-label="Link to Observe and use the result">#</a></h3>
+<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake status
+transcript-lake sessions --limit 20
+transcript-lake events --type tool_call --limit 20
+transcript-lake search &quot;refactor&quot; --limit 20
+transcript-lake show &lt;session-id&gt;
+transcript-lake label add &lt;session-id&gt; --aspect reviewed --value yes
+transcript-lake label aspects
+transcript-lake stats --days 7</code></pre></div>
+<p>Expected: status has a live stream record and cursor count. When supported events exist, partition counts, recent sessions/events, and statistics are non-empty, and text search returns the newest events containing the literal term. <code>show</code> reads one whole conversation back in chronological order, closing with a <code>rendered N of M</code> footer. <code>label add</code> validates the session against the Lake and appends one operator annotation beneath <code>LAKE_DATA/labels</code>. The analytics commands require DuckDB. Add <code>--json</code> for automation.</p>
+<h2 id="safe-recovery-and-derived-cleanup">Safe recovery and derived cleanup<a class="heading-anchor" href="#safe-recovery-and-derived-cleanup" aria-label="Link to Safe recovery and derived cleanup">#</a></h2>
+<p>For damaged cursors or a confirmed non-append source change, preserve the current root and rebuild elsewhere:</p>
+<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake rebuild --to &quot;$HOME/.transcript-lake-rebuild&quot;
+transcript-lake --data-dir &quot;$HOME/.transcript-lake-rebuild&quot; doctor
+transcript-lake --data-dir &quot;$HOME/.transcript-lake-rebuild&quot; status</code></pre></div>
+<p>Preview and optionally remove only rebuildable derived data:</p>
+<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake clean --target all
+transcript-lake clean --target all --apply</code></pre></div>
+<p><code>clean</code> never removes authoritative NDJSON, cursors, stream state, or vendor transcripts.</p>
+<h2 id="safe-reset-and-uninstall">Safe reset and uninstall<a class="heading-anchor" href="#safe-reset-and-uninstall" aria-label="Link to Safe reset and uninstall">#</a></h2>
+<p>Stop the stream using the same root. Preserve evidence by moving rather than deleting the state:</p>
+<div class="code-block"><div class="code-label">sh</div><pre><code>STAMP=$(date -u &#x27;+%Y%m%dT%H%M%SZ&#x27;)
+mv &quot;$LAKE_DATA&quot; &quot;$LAKE_DATA.reset-$STAMP&quot;</code></pre></div>
+<p>A later stream starts from zero. Delete the retained directory only after confirming it is no longer needed. This does not remove vendor transcripts.</p>
+<p>Uninstall the global development or release package:</p>
+<div class="code-block"><div class="code-label">sh</div><pre><code>cargo uninstall transcript-lake</code></pre></div>
+<p>A release archive installed by hand is removed the same way it was placed: <code>rm &quot;$HOME/.local/bin/transcript-lake&quot;</code>.</p>
+<p>Uninstallation leaves <code>LAKE_DATA</code> intact. Remove or retain that state as a separate operator decision.</p>
+<h2 id="common-failures">Common failures<a class="heading-anchor" href="#common-failures" aria-label="Link to Common failures">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>Symptom</th><th>Meaning</th><th>Corrective action</th></tr></thead><tbody><tr><td><code>transcript-lake: command not found</code></td><td>The installed binary is not on <code>PATH</code></td><td>Add the install directory (<code>~/.cargo/bin</code> after <code>cargo install</code>) to <code>PATH</code>, then rerun <code>transcript-lake --version</code></td></tr><tr><td><code>unknown command</code> or <code>unknown ... flag</code></td><td>Input is outside the public CLI contract</td><td>Run <code>transcript-lake --help</code> and correct the command before retrying</td></tr><tr><td>Permission error reading a vendor path</td><td>Current user cannot read that source</td><td>Correct ownership for the same user; do not elevate the stream</td></tr><tr><td>Permission error beneath <code>LAKE_DATA</code></td><td>State root is not writable</td><td>Select an owned local path and restart; the failed source cursor did not advance</td></tr><tr><td><code>duckdb failed to start</code></td><td>Optional SQL dependency is absent</td><td>Install compatible DuckDB; streaming and status remain available</td></tr><tr><td><code>oko-cli is not on PATH</code></td><td>Optional Oko integration is unavailable</td><td>Install Oko or set <code>OKO_CLI</code>; core Lake state remains valid</td></tr><tr><td>Empty partition inventory while streaming</td><td>No supported complete records have arrived</td><td>Confirm an agent is appending within a root reported by <code>sources</code></td></tr><tr><td>Cursor store is unreadable</td><td>Cursor JSON was damaged</td><td>Preserve the current Lake and run <code>rebuild --to &lt;empty-path&gt;</code>; never edit cursors or replay into existing partitions</td></tr><tr><td>Source shrank or changed without append</td><td>The append-only source contract was violated</td><td>Preserve both source and Lake, then use <code>rebuild --to &lt;empty-path&gt;</code></td></tr><tr><td>Another writer holds the state lock</td><td>A mutation already owns this root</td><td>Let that writer finish or diagnose its process; do not delete a live lock</td></tr><tr><td>Interrupted stream</td><td>Process stopped after atomic checkpoints</td><td>Restart it; each source resumes at its last committed byte cursor</td></tr><tr><td>Historical replay needs too much space</td><td>Entire selected history was rebuilt</td><td>Retain current evidence and rebuild to a larger empty root or select one runtime</td></tr></tbody></table></div>
+<p>Errors name the failed dependency or path. A source-local failure is logged and leaves that cursor unchanged; fatal startup or authoritative-state failure exits non-zero for the supervisor to restart.</p>
+<h2 id="machine-onboarding">Machine onboarding<a class="heading-anchor" href="#machine-onboarding" aria-label="Link to Machine onboarding">#</a></h2>
+<p>Automation should:</p>
+<ol><li>install an exact archive and verify its SHA-256 digest;</li><li>pass an explicit absolute <code>--data-dir</code> or set <code>LAKE_DATA</code>;</li><li>invoke <code>transcript-lake doctor --json</code> before mutation;</li><li>supervise one <code>transcript-lake stream --json</code> process and parse its JSONL lifecycle records;</li><li>treat process exit as a fatal lifecycle event and each <code>failure</code> record as source-local;</li><li>serialize compaction, reconstruction, and applied cleanup against the stream writer lease;</li><li>use <code>status --json</code>, <code>sources --json</code>, and bounded analytics commands for machine diagnostics;</li><li>retain selected version, source commit, archive digest, stream log, and cleanup ownership.</li></ol>
+<p>Continuous freshness requires exactly one explicit supervised stream. Retention, backups, and access control for the data directory remain operator-managed.</p>
+<h2 id="further-reading">Further reading<a class="heading-anchor" href="#further-reading" aria-label="Link to Further reading">#</a></h2>
+<ul><li>Run the <a href="/docs/examples/">canonical examples</a>.</li><li>Learn the <a href="/docs/lake/">event and storage contract</a>.</li><li>Review <a href="/docs/releases/">release, upgrade, and rollback</a>.</li><li>Configure only the optional integrations you need in <a href="/docs/integrations/">integration contracts</a>.</li></ul></div>
+        <nav class="article-pagination" aria-label="Adjacent documentation"><a href="/docs/quick-start/"><small>Previous</small><span>← Quick start: a synthetic local Lake</span></a><a class="next" href="/docs/configuration/"><small>Next</small><span>Configuration reference →</span></a></nav>
+      </article>
+      <aside class="page-toc" aria-label="On this page"><strong>On this page</strong><a href="#choose-the-channel" class="toc-level-2">Choose the channel</a><a href="#prerequisites" class="toc-level-2">Prerequisites</a><a href="#required-for-every-installation" class="toc-level-3">Required for every installation</a><a href="#required-only-for-sql-and-compaction" class="toc-level-3">Required only for SQL and compaction</a><a href="#required-only-for-oko-integration" class="toc-level-3">Required only for Oko integration</a><a href="#install-an-immutable-release" class="toc-level-2">Install an immutable release</a><a href="#development-installation" class="toc-level-2">Development installation</a><a href="#zero-state" class="toc-level-2">Zero state</a><a href="#minimum-configuration" class="toc-level-2">Minimum configuration</a><a href="#first-successful-workflow" class="toc-level-2">First successful workflow</a><a href="#starting-state" class="toc-level-3">Starting state</a><a href="#inspect-without-mutation" class="toc-level-3">Inspect without mutation</a><a href="#start-the-stream" class="toc-level-3">Start the stream</a><a href="#observe-and-use-the-result" class="toc-level-3">Observe and use the result</a><a href="#safe-recovery-and-derived-cleanup" class="toc-level-2">Safe recovery and derived cleanup</a><a href="#safe-reset-and-uninstall" class="toc-level-2">Safe reset and uninstall</a><a href="#common-failures" class="toc-level-2">Common failures</a><a href="#machine-onboarding" class="toc-level-2">Machine onboarding</a><a href="#further-reading" class="toc-level-2">Further reading</a></aside>
+    </div>
+  </main>
+</div>
+<footer class="docs-footer"><span>Transcript Lake documentation</span><a href="https://github.com/wisent-ai/transcript-lake">GitHub ↗</a></footer>
+</div>
+  <script src="/script.js" defer></script>
+</body>
+</html>
