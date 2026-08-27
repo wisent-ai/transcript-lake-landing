@@ -8,7 +8,33 @@
   <url><loc>https://transcript-lake.wisent.com/docs/onboarding/</loc></url>
   <url><loc>https://transcript-lake.wisent.com/docs/releases/</loc></url>
   <url><loc>https://transcript-lake.wisent.com/docs/architecture/</loc></url>
-  <url><loc>https://transcript-lake.wisent.com/docs/cli-reference/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/paths/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/sources/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/doctor/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/status/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/stream/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/rebuild/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/sessions/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/events/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/search/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/show/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/stats/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/hooks/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/signals/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/label/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/label/add/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/label/list/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/label/aspects/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/goal/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/goal/title/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/goal/label/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/query/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/compact/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/rebuild-oko/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/oko-refresh/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/clean/</loc></url>
+  <url><loc>https://transcript-lake.wisent.com/docs/cli/help/</loc></url>
   <url><loc>https://transcript-lake.wisent.com/docs/concepts/cursor/</loc></url>
   <url><loc>https://transcript-lake.wisent.com/docs/concepts/event/</loc></url>
   <url><loc>https://transcript-lake.wisent.com/docs/concepts/export/</loc></url>

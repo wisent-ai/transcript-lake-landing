@@ -1,7 +1,7 @@
 {
   "website_repository": "wisent-ai/transcript-lake-landing",
   "canonical_base": "https://transcript-lake.wisent.com/docs/",
-  "topic_count": 42,
+  "topic_count": 68,
   "topics": [
     {
       "source": "docs/core/index.html",
@@ -28,8 +28,112 @@
       "url": "https://transcript-lake.wisent.com/docs/architecture/"
     },
     {
-      "source": "docs/cli-reference/index.html",
-      "url": "https://transcript-lake.wisent.com/docs/cli-reference/"
+      "source": "docs/cli/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/"
+    },
+    {
+      "source": "docs/cli/paths/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/paths/"
+    },
+    {
+      "source": "docs/cli/sources/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/sources/"
+    },
+    {
+      "source": "docs/cli/doctor/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/doctor/"
+    },
+    {
+      "source": "docs/cli/status/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/status/"
+    },
+    {
+      "source": "docs/cli/stream/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/stream/"
+    },
+    {
+      "source": "docs/cli/rebuild/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/rebuild/"
+    },
+    {
+      "source": "docs/cli/sessions/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/sessions/"
+    },
+    {
+      "source": "docs/cli/events/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/events/"
+    },
+    {
+      "source": "docs/cli/search/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/search/"
+    },
+    {
+      "source": "docs/cli/show/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/show/"
+    },
+    {
+      "source": "docs/cli/stats/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/stats/"
+    },
+    {
+      "source": "docs/cli/hooks/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/hooks/"
+    },
+    {
+      "source": "docs/cli/signals/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/signals/"
+    },
+    {
+      "source": "docs/cli/label/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/label/"
+    },
+    {
+      "source": "docs/cli/label/add/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/label/add/"
+    },
+    {
+      "source": "docs/cli/label/list/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/label/list/"
+    },
+    {
+      "source": "docs/cli/label/aspects/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/label/aspects/"
+    },
+    {
+      "source": "docs/cli/goal/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/goal/"
+    },
+    {
+      "source": "docs/cli/goal/title/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/goal/title/"
+    },
+    {
+      "source": "docs/cli/goal/label/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/goal/label/"
+    },
+    {
+      "source": "docs/cli/query/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/query/"
+    },
+    {
+      "source": "docs/cli/compact/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/compact/"
+    },
+    {
+      "source": "docs/cli/rebuild-oko/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/rebuild-oko/"
+    },
+    {
+      "source": "docs/cli/oko-refresh/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/oko-refresh/"
+    },
+    {
+      "source": "docs/cli/clean/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/clean/"
+    },
+    {
+      "source": "docs/cli/help/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/help/"
     },
     {
       "source": "docs/concepts/cursor/index.html",

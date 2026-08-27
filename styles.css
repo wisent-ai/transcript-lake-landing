@@ -185,6 +185,12 @@ h1, h2, h3, p { margin-top: 0; }
 .article-content ul, .article-content ol { margin: 1rem 0 1.6rem; padding-left: 1.55rem; }
 .article-content li { margin: .55rem 0; padding-left: .25rem; }
 .article-content li::marker { color: var(--cyan); font-family: var(--mono); }
+.cli-command-tree { display: grid; gap: .7rem; padding: 0; list-style: none; }
+.cli-command-tree li { display: grid; grid-template-columns: minmax(110px, .35fr) 1fr; gap: .25rem 1rem; margin: 0; padding: 1rem; border: 1px solid var(--line); background: rgba(4, 16, 24, .45); }
+.cli-command-tree li::marker { content: ""; }
+.cli-command-tree a { align-self: start; font-size: 1rem; text-decoration: none; }
+.cli-command-tree span { color: #aac2cb; }
+.cli-command-tree small { grid-column: 2; color: #607f8b; font: 400 .7rem/1.55 var(--mono); overflow-wrap: anywhere; }
 .code-block { margin: 1.7rem 0 2rem; overflow: hidden; border: 1px solid #233f4b; background: #041018; }
 .code-label { min-height: 34px; display: flex; align-items: center; padding: 0 .9rem; border-bottom: 1px solid #1e3742; color: #577684; font: 500 .55rem var(--mono); letter-spacing: .1em; text-transform: uppercase; }
 .code-block pre { margin: 0; padding: 1.35rem; overflow-x: auto; color: #b5d2da; font: 400 .75rem/1.65 var(--mono); tab-size: 2; }
@@ -291,6 +297,8 @@ blockquote { margin: 1.8rem 0; padding: 1rem 1.3rem; border-left: 2px solid var(
   .article-content h2 { font-size: 1.8rem; }
   .article-pagination { grid-template-columns: 1fr; }
   .article-pagination .next { grid-column: 1; }
+  .cli-command-tree li { grid-template-columns: 1fr; }
+  .cli-command-tree small { grid-column: 1; }
   .docs-hero h1 { font-size: 3.5rem; }
   .docs-page .site-header { padding: 0 1rem; }
 }
