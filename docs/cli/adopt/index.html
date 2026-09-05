@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>adopt — Transcript Lake</title>
+  <meta name="description" content="Validate, ingest, and persist one discovered existing transcript source through Transcript Lake's canonical boundary.">
+  <meta name="theme-color" content="#07121a">
+  <meta property="og:title" content="adopt — Transcript Lake">
+  <meta property="og:description" content="Validate, ingest, and persist one discovered existing transcript source through Transcript Lake's canonical boundary.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://transcript-lake.wisent.com/docs/cli/adopt/">
+  <link rel="canonical" href="https://transcript-lake.wisent.com/docs/cli/adopt/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Space+Grotesk:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="ambient" aria-hidden="true"></div>
+  <div class="docs-shell">
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Transcript Lake home"><span class="brand-mark" aria-hidden="true"><span>T</span>L</span><span class="brand-name">Transcript Lake</span></a>
+      <nav class="top-nav" aria-label="Primary navigation"><a href="/docs/">Documentation</a><a href="https://github.com/wisent-ai/transcript-lake" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a></nav>
+    </header>
+    <button class="docs-menu-button" type="button" aria-controls="docs-nav" aria-expanded="false">Browse topics</button>
+    <div class="docs-layout">
+      <div id="docs-nav"><nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home-link" href="/docs/">Documentation home</a><section class="nav-group"><h2>Start here</h2><a href="/docs/onboarding/">Onboarding</a><a href="/docs/configuration/">Configuration reference</a></section><section class="nav-group"><h2>CLI</h2><a href="/docs/cli/">Command reference</a><a href="/docs/cli/sources/">sources</a><a href="/docs/cli/adopt/" aria-current="page" class="active">adopt</a><a href="/docs/cli/stream/">stream</a><a href="/docs/cli/status/">status</a></section></nav></div>
+      <main class="docs-main" id="main">
+        <div class="article-layout">
+          <article class="doc-article">
+            <header class="article-header"><p class="eyebrow">Documentation / CLI</p><h1><code>adopt</code></h1><p>Validate, ingest, and persist one exact existing transcript source.</p></header>
+            <div class="article-content">
+              <div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake [--data-dir &lt;path&gt;] adopt \
+  --source {claude|codex|omp|droid|kimi} \
+  --root &lt;discovered-root&gt; [--json]</code></pre></div>
+              <h2 id="inputs">Inputs<a class="heading-anchor" href="#inputs" aria-label="Link to Inputs">#</a></h2>
+              <p><code>--source</code> and <code>--root</code> are required exactly once. The canonicalized root must equal a root returned for that runtime by <a href="/docs/cli/sources/"><code>sources</code></a>. Symlink aliases, arbitrary archives, individual transcript files, hook telemetry, and unrecognized runtime names are refused.</p>
+              <p>Supported inputs are the adapters' established stores: Claude Code projects, Codex sessions, OMP sessions, Factory Droid session directories (including its complete <code>*.settings.json</code> objects), and Kimi work-directory sessions. This command does not define a generic interchange format.</p>
+              <h2 id="atomic-validation">Atomic validation<a class="heading-anchor" href="#atomic-validation" aria-label="Link to Atomic validation">#</a></h2>
+              <p>Before mutation, every discovered candidate must resolve inside the selected root, be a regular adapter-owned file, and contain the runtime's supported JSON shape. Every complete nonempty JSONL line must be valid JSON with a recognized record type. An unsupported or malformed complete record rejects the whole adoption. An unterminated final line is not consumed and is counted as pending so a live writer can finish it later.</p>
+              <p>After preflight, the normal writer lease, masking, canonical partition, cursor, and Oko projection code ingests the source. The selection is written only after the destination accepts either new canonical events or verified unchanged files. Invalid input does not mark onboarding complete.</p>
+              <h2 id="duplicates-and-state">Duplicates and retained state<a class="heading-anchor" href="#duplicates-and-state" aria-label="Link to Duplicates and retained state">#</a></h2>
+              <p>The stable source id is derived from runtime plus canonical root. Existing Lake partitions and earlier source declarations are preserved. Byte cursors make a repeated unchanged source idempotent; new appends resume after the last durable offset. The selected id and all adopted declarations are retained in <code>LAKE_DATA/sources.json</code>. Once selected, <code>stream</code> follows only that exact source instead of every discovered root.</p>
+              <h2 id="result">Result<a class="heading-anchor" href="#result" aria-label="Link to Result">#</a></h2>
+              <p>Human output names the source, status, runtime, root, imported/unchanged files, and imported events. <code>--json</code> additionally returns <code>candidateFiles</code>, <code>candidateEvents</code>, <code>pendingIncompleteLines</code>, <code>conflicting</code>, <code>rejected</code>, <code>selected</code>, and <code>dataDir</code>. Transcript text and credentials are never printed.</p>
+              <h2 id="failures">Failures<a class="heading-anchor" href="#failures" aria-label="Link to Failures">#</a></h2>
+              <p>Missing flags, duplicate flags, unknown runtime, absent or non-discovered root, empty source, unreadable file, path escape, malformed JSON, unsupported record type, writer-lease conflict, masking/write failure, or a selection-registry failure exits non-zero. The error names the path or contract that failed.</p>
+              <p>The same operation is available during first use as <code>transcript-lake onboarding --source &lt;runtime&gt; --root &lt;path&gt;</code>. <code>--skip-source</code> keeps an empty usable Lake and records no source fact.</p>
+            </div>
+            <nav class="article-pagination" aria-label="Adjacent documentation"><a href="/docs/cli/sources/"><small>Previous</small><span>← sources</span></a><a class="next" href="/docs/cli/stream/"><small>Next</small><span>stream →</span></a></nav>
+          </article>
+          <aside class="page-toc" aria-label="On this page"><strong>On this page</strong><a href="#inputs" class="toc-level-2">Inputs</a><a href="#atomic-validation" class="toc-level-2">Atomic validation</a><a href="#duplicates-and-state" class="toc-level-2">Duplicates and retained state</a><a href="#result" class="toc-level-2">Result</a><a href="#failures" class="toc-level-2">Failures</a></aside>
+        </div>
+      </main>
+    </div>
+    <footer class="docs-footer"><span>Transcript Lake documentation</span><a href="https://github.com/wisent-ai/transcript-lake">GitHub ↗</a></footer>
+  </div>
+  <script src="/script.js" defer></script>
+</body>
+</html>
