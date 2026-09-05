@@ -1,7 +1,7 @@
 {
   "website_repository": "wisent-ai/transcript-lake-landing",
   "canonical_base": "https://transcript-lake.wisent.com/docs/",
-  "topic_count": 68,
+  "topic_count": 69,
   "topics": [
     {
       "source": "docs/core/index.html",
@@ -38,6 +38,10 @@
     {
       "source": "docs/cli/sources/index.html",
       "url": "https://transcript-lake.wisent.com/docs/cli/sources/"
+    },
+    {
+      "source": "docs/cli/adopt/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/adopt/"
     },
     {
       "source": "docs/cli/doctor/index.html",
