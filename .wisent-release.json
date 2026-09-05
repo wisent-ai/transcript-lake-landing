@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "product": "transcript-lake-landing",
+  "releases": true,
+  "version_source": {
+    "kind": "text",
+    "path": "VERSION"
+  },
+  "platforms": {
+    "web": {
+      "runner_platform": "darwin-arm64",
+      "quality": [
+        {
+          "name": "web-quality",
+          "argv": [
+            "stado",
+            "web",
+            "quality"
+          ]
+        }
+      ],
+      "build": {
+        "argv": [
+          "stado",
+          "web",
+          "build"
+        ]
+      },
+      "stage": {
+        "dist/transcript-lake-landing-web.tar.gz": "transcript-lake-landing-web.tar.gz",
+        "dist/transcript-lake-landing-web.tar.gz.sha256": "transcript-lake-landing-web.tar.gz.sha256",
+        "dist/SOURCE_REVISION": "SOURCE_REVISION"
+      },
+      "secret_env": {}
+    }
+  },
+  "promotion": {
+    "channels": [
+      "candidate",
+      "stable"
+    ],
+    "reconcile": false
+  }
+}
