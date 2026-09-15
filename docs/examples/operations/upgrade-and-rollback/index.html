@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Upgrade and roll back an exact release — Transcript Lake</title>
-  <meta name="description" content="1. Goal: Replace one immutable Transcript Lake release with another while retaining a reversible state boundary. 2. Status: Release process defined; no immutable release is currently published, so commands are templates pending a real release. 3. Risk: Network">
+  <meta name="description" content="Check exact release provenance, the supervised stream, and the 0.2.1 source checkpoint boundary before upgrading or rolling back.">
   <meta name="theme-color" content="#07121a">
   <meta property="og:title" content="Upgrade and roll back an exact release — Transcript Lake">
-  <meta property="og:description" content="1. Goal: Replace one immutable Transcript Lake release with another while retaining a reversible state boundary. 2. Status: Release process defined; no immutable release is currently published, so commands are templates pending a real release. 3. Risk: Network">
+  <meta property="og:description" content="Check exact release provenance, the supervised stream, and the 0.2.1 source checkpoint boundary before upgrading or rolling back.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://transcript-lake.wisent.com/docs/examples/operations/upgrade-and-rollback/">
   <link rel="canonical" href="https://transcript-lake.wisent.com/docs/examples/operations/upgrade-and-rollback/">
@@ -34,20 +34,17 @@
   <main class="docs-main" id="main">
     <div class="article-layout">
       <article class="doc-article">
-        <header class="article-header"><p class="eyebrow">Documentation / Examples</p><h1>Upgrade and roll back an exact release</h1><p>1. Goal: Replace one immutable Transcript Lake release with another while retaining a reversible state boundary. 2. Status: Release process defined; no immutable release is currently published, so commands are templates pending a real release. 3. Risk: Network</p></header>
-        <div class="article-content"><ol><li><strong>Goal:</strong> Replace one immutable Transcript Lake release with another while retaining a reversible state boundary.</li><li><strong>Status:</strong> Release process defined; no immutable release is currently published, so commands are templates pending a real release.</li><li><strong>Risk:</strong> Network installation and destructive/recovery state switch. Never run against the only unbacked-up Lake.</li><li><strong>Environment:</strong> Supported macOS host, published GitHub release assets, operator-controlled backup location.</li><li><strong>Preconditions:</strong> Exact target and prior versions, verified archive checksums and provenance, reviewed release notes and state compatibility, stopped stream, successful backup.</li><li><strong>Inputs:</strong> Replace <code>&lt;target-version&gt;</code>, <code>&lt;prior-version&gt;</code>, archive paths, and checksum values only with values from one immutable GitHub release.</li><li><strong>Artifacts and side effects:</strong> The extracted binary replaces the installed executable. Backup copies local Lake state. No provider transcript is modified.</li><li><strong>Steps:</strong></li></ol>
-<div class="code-block"><div class="code-label">sh</div><pre><code>shasum -a 256 -c transcript-lake-&lt;target-version&gt;-&lt;triple&gt;.tar.gz.sha256
-cp -a &quot;$LAKE_DATA&quot; &quot;$LAKE_DATA.backup-&lt;prior-version&gt;&quot;
-tar -xzf transcript-lake-&lt;target-version&gt;-&lt;triple&gt;.tar.gz
-install -m 755 transcript-lake-&lt;target-version&gt;-&lt;triple&gt;/transcript-lake &quot;$HOME/.local/bin/transcript-lake&quot;
+        <header class="article-header"><p class="eyebrow">Documentation / Examples</p><h1>Upgrade and roll back an exact release</h1><p>Preserve the exact binary and state boundary. Publication and state compatibility must both be established before changing a supervised installation.</p></header>
+        <div class="article-content"><ol><li><strong>Goal:</strong> Change a declared Transcript Lake version without losing archived instructions or rollback provenance.</li><li><strong>Status:</strong> No immutable Transcript Lake release is currently published. This is a decision and refusal guide, not a claim that a production rollback journey passed.</li><li><strong>Risk:</strong> Binary replacement and persisted-state compatibility. A binary rollback does not reverse writes already made to a Lake.</li><li><strong>Inputs:</strong> Exact target and prior Stado publication receipts, artifact digests, installed version, and the release's state compatibility notes.</li></ol>
+<div class="code-block"><div class="code-label">sh</div><pre><code>stado release status transcript-lake --json
 transcript-lake --version
-transcript-lake status</code></pre></div>
-<p>If rollback is required and the release notes declare state compatibility:</p>
-<div class="code-block"><div class="code-label">sh</div><pre><code>tar -xzf transcript-lake-&lt;prior-version&gt;-&lt;triple&gt;.tar.gz
-install -m 755 transcript-lake-&lt;prior-version&gt;-&lt;triple&gt;/transcript-lake &quot;$HOME/.local/bin/transcript-lake&quot;
-transcript-lake --version</code></pre></div>
-<p>Restore the backup only with the stream stopped and only when the release notes require state rollback.</p>
-<ol><li><strong>Verification:</strong> Installed <code>--version</code> exactly matches the selected immutable release. Status can read existing state without mutation. Archive digest matches the published checksum and provenance names the same tag and source commit.</li><li><strong>Failure path:</strong> Checksum mismatch, missing provenance, version mismatch, unreadable status, or incompatible state is a hard stop. Keep the prior artifact and backup; do not use <code>latest</code> to bypass identity.</li><li><strong>Cleanup or off-switch:</strong> Retain the prior artifact and backup through the rollback window. Remove them only after the retention decision. Restart the supervised stream last.</li><li><strong>Next:</strong> Follow the exact release's qualification and migration notes in <a href="/docs/releases/">release policy</a>.</li></ol></div>
+transcript-lake status --json
+stado service status com.wisent.transcript-lake-stream --json</code></pre></div>
+<p>Read the selected release's provenance and follow <a href="/docs/onboarding/#install-an-immutable-release">verified artifact installation</a> only when the receipt exists. A supervised stream is owned by its Stado declaration and reconciliation policy; an operator's manual restart is not the upgrade mechanism.</p>
+<h2 id="source-recovery-boundary">The 0.2.1 source recovery boundary</h2>
+<p>Existing three-field cursors migrate lazily on the next successful source read. Canonical history is retained, and an interrupted replay leaves its previous cursor so the next read can resume safely. A binary older than 0.2.1 does not validate that source checkpoint and may again skip instructions inserted before its byte offset. Do not treat its ability to parse the file as rollback safety.</p>
+<p>For canonical corruption or an intentionally separate historical reconstruction, use the documented <a href="/docs/examples/recovery/rebuild-into-empty-root/">empty-root rebuild</a> and retain the original Lake. A normal source rewrite does not require that destructive recovery path.</p>
+<ol><li><strong>Verification:</strong> Compare the installed version and artifact digest with the receipt, inspect the service's actual observed state, and run the affected source recovery journeys. A status file alone does not prove that the stream is running or that missing instructions were recovered.</li><li><strong>Refusals:</strong> No publication receipt, a digest mismatch, missing rollback compatibility, unreadable canonical state, or a stopped stream prevents a successful upgrade or rollback verdict.</li><li><strong>Retention:</strong> Keep prior artifacts and state evidence through the declared rollback window. Do not discard the only readable history or rewrite an immutable release coordinate.</li></ol></div>
         <nav class="article-pagination" aria-label="Adjacent documentation"><a href="/docs/examples/operations/reset-and-uninstall/"><small>Previous</small><span>← Reset local state and uninstall</span></a><a class="next" href="/docs/examples/recovery/rebuild-into-empty-root/"><small>Next</small><span>Rebuild into an empty root →</span></a></nav>
       </article>
       

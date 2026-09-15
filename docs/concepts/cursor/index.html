@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Concept: cursor and writer lease — Transcript Lake</title>
-  <meta name="description" content="A byte cursor records how far Transcript Lake has consumed one append-only source file:">
+  <meta name="description" content="A source cursor records a complete-line boundary, verified source prefix, and file identity. Rewritten journals recover missing history without duplicating retained events.">
   <meta name="theme-color" content="#07121a">
   <meta property="og:title" content="Concept: cursor and writer lease — Transcript Lake">
-  <meta property="og:description" content="A byte cursor records how far Transcript Lake has consumed one append-only source file:">
+  <meta property="og:description" content="A source cursor records a complete-line boundary, verified source prefix, and file identity. Rewritten journals recover missing history without duplicating retained events.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://transcript-lake.wisent.com/docs/concepts/cursor/">
   <link rel="canonical" href="https://transcript-lake.wisent.com/docs/concepts/cursor/">
@@ -34,11 +34,12 @@
   <main class="docs-main" id="main">
     <div class="article-layout">
       <article class="doc-article">
-        <header class="article-header"><p class="eyebrow">Documentation / Concepts</p><h1>Concept: cursor and writer lease</h1><p>A byte cursor records how far Transcript Lake has consumed one append-only source file:</p></header>
-        <div class="article-content"><p>A byte cursor records how far Transcript Lake has consumed one append-only source file:</p>
+        <header class="article-header"><p class="eyebrow">Documentation / Concepts</p><h1>Concept: cursor and writer lease</h1><p>A cursor proves which source bytes reached the masked archive. A byte count alone cannot prove that a vendor did not rewrite earlier instructions.</p></header>
+        <div class="article-content"><p>The legacy cursor contains three fields:</p>
 <div class="code-block"><div class="code-label">json</div><pre><code>{&quot;mtimeMs&quot;: 0.0, &quot;size&quot;: 0, &quot;offset&quot;: 0}</code></pre></div>
-<p><code>LAKE_DATA/cursors.json</code> maps absolute source paths to these records. <code>offset</code> is always a complete-line boundary. The stream compares current size/mtime to detect a safe append, unchanged file, shrink, or same-size rewrite.</p>
-<p>A checkpoint is published only after canonical partitions and affected Oko session projections succeed. Publication uses a cursor lock, temp file, file fsync, rename, and data-directory fsync. Invalid cursor JSON is refused because silently resetting it could duplicate evidence in existing partitions.</p>
+<p><code>LAKE_DATA/cursors.json</code> maps absolute source paths to records. <code>offset</code> is a complete-line boundary. Current records also contain <code>source</code>: <code>sha256</code> is a 32-byte JSON array for the consumed prefix; <code>device</code>, <code>inode</code>, <code>changedSeconds</code>, and <code>changedNanos</code> identify the opened source generation. Unchanged detection requires these fields, matching size/mtime, and a fully consumed file.</p>
+<p>For a modified file, the reader hashes the consumed prefix once before resuming. A changed or shorter prefix, or a legacy cursor with no proof, replays that source from the beginning. Existing masked canonical occurrences are counted rather than appended again, missing Oko rows are restored, and historical rows are never removed. Legacy records migrate lazily without a second Lake or raw-source copy.</p>
+<p>A checkpoint follows canonical partition fsync and successful Oko projection writes. Recovery retains its old cursor until the whole source succeeds, so a failed later batch cannot turn its unfinished replay into an append. Retrying compares against all already retained occurrences. Cursor publication uses a lock, temporary file, fsync, rename, and data-directory fsync. Corrupt cursor JSON or canonical evidence is refused with its path and cause, not silently reset.</p>
 <p><code>LAKE_DATA/stream.lock/owner.json</code> grants one state writer at a time. The atomic lease records host, pid, process start, and token. A live incumbent is a refusal; a provably dead one can be recovered. Labels do not share this lease.</p>
 <p>A cursor is resume metadata, not a copy of the vendor transcript and not an event index.</p>
 <p>See <a href="/docs/ingestion-reference/#commit-protocol">ingestion commit protocol</a>.</p></div>

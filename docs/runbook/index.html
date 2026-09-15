@@ -51,10 +51,10 @@ transcript-lake --data-dir &quot;$HOME/.transcript-lake-rebuild&quot; doctor
 transcript-lake --data-dir &quot;$HOME/.transcript-lake-rebuild&quot; status</code></pre></div>
 <p>Switch consumers only after inspecting the new root. Retain the old root until the operator approves disposal.</p>
 <h2 id="source-shrank-or-changed-without-an-append">Source shrank or changed without an append<a class="heading-anchor" href="#source-shrank-or-changed-without-an-append" aria-label="Link to Source shrank or changed without an append">#</a></h2>
-<p><strong>Messages:</strong></p>
-<ul><li><code>source shrank after its last checkpoint; preserve the Lake and use rebuild</code></li><li><code>source changed without an append; preserve the Lake and use rebuild</code></li></ul>
-<p>A vendor rotated, truncated, or rewrote a tracked file. Preserve both vendor source and Lake. Rebuild to a different empty root. Optional <code>--source &lt;runtime&gt;</code> narrows replay only when the operator has established that other runtimes are unaffected.</p>
-<p>Related guardrails:</p>
+<p><strong>Recovery reasons:</strong></p>
+<ul><li><code>legacy cursor has no verified source prefix</code></li><li><code>source is shorter than its consumed prefix</code></li><li><code>source bytes before the cursor changed</code></li></ul>
+<p>These messages announce automatic recovery, not a request to discard the Lake. The stream reads that source through masking and compares retained canonical occurrences. Its diagnostic includes the path, previous offset, and observed size. Missing instructions and Oko rows are restored; archived history stays intact. Per-runtime summaries include <code>replayedFiles</code>. Legacy cursors migrate on the next catch-up even without a new append.</p>
+<p>If recovery fails later, its previous cursor remains. Correct the named storage or access failure; the next source notification or supervised startup repeats the retained-history comparison safely. A corrupt partition is refused as <code>cannot replay source against corrupt canonical partition &lt;path&gt; at line &lt;line&gt;: &lt;cause&gt;</code>. Preserve that evidence. Separate reconstruction remains available for damaged authoritative state, with these guardrails:</p>
 <ul><li><code>rebuild requires --to &lt;empty-path&gt;</code></li><li><code>rebuild target must differ from the current Lake</code></li><li><code>rebuild requires an empty LAKE_DATA root so replay cannot duplicate or erase existing evidence</code></li></ul>
 <h2 id="stream-watcher-failures">Stream watcher failures<a class="heading-anchor" href="#stream-watcher-failures" aria-label="Link to Stream watcher failures">#</a></h2>
 <p><strong>Messages:</strong></p>

@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Rebuild into an empty root — Transcript Lake</title>
-  <meta name="description" content="1. Goal: Recover from cursor damage or non-append source change without risking the existing Lake. 2. Risk: Destructive/recovery workflow and provider-facing read. No deletion is part of the recovery command. 3. Environment: macOS, installed Transcript Lake, s">
+  <meta name="description" content="Reconstruct damaged authoritative state into a separate empty Lake while preserving the old root. Ordinary source rewrites recover automatically without this operation.">
   <meta name="theme-color" content="#07121a">
   <meta property="og:title" content="Rebuild into an empty root — Transcript Lake">
-  <meta property="og:description" content="1. Goal: Recover from cursor damage or non-append source change without risking the existing Lake. 2. Risk: Destructive/recovery workflow and provider-facing read. No deletion is part of the recovery command. 3. Environment: macOS, installed Transcript Lake, s">
+  <meta property="og:description" content="Reconstruct damaged authoritative state into a separate empty Lake while preserving the old root. Ordinary source rewrites recover automatically without this operation.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://transcript-lake.wisent.com/docs/examples/recovery/rebuild-into-empty-root/">
   <link rel="canonical" href="https://transcript-lake.wisent.com/docs/examples/recovery/rebuild-into-empty-root/">
@@ -34,8 +34,8 @@
   <main class="docs-main" id="main">
     <div class="article-layout">
       <article class="doc-article">
-        <header class="article-header"><p class="eyebrow">Documentation / Examples</p><h1>Rebuild into an empty root</h1><p>1. Goal: Recover from cursor damage or non-append source change without risking the existing Lake. 2. Risk: Destructive/recovery workflow and provider-facing read. No deletion is part of the recovery command. 3. Environment: macOS, installed Transcript Lake, s</p></header>
-        <div class="article-content"><ol><li><strong>Goal:</strong> Recover from cursor damage or non-append source change without risking the existing Lake.</li><li><strong>Risk:</strong> Destructive/recovery workflow and provider-facing read. No deletion is part of the recovery command.</li><li><strong>Environment:</strong> macOS, installed Transcript Lake, sufficient disk for a second full Lake.</li><li><strong>Preconditions:</strong> Stop the stream; preserve the failed Lake and vendor sources; select a genuinely empty replacement root; capture the original error and status.</li><li><strong>Inputs:</strong> Old <code>LAKE_DATA</code> for read-only diagnosis, then a different empty absolute path for historical replay.</li><li><strong>Artifacts and side effects:</strong> <code>rebuild</code> reads complete selected vendor histories and writes a separate Lake, cursors, and Oko projection. The old root remains untouched.</li><li><strong>Steps:</strong></li></ol>
+        <header class="article-header"><p class="eyebrow">Documentation / Examples</p><h1>Rebuild into an empty root</h1><p>Reconstruct damaged authoritative state without overwriting the existing Lake. Ordinary source rewrites recover automatically and do not require a second root.</p></header>
+        <div class="article-content"><ol><li><strong>Goal:</strong> Reconstruct history after cursor or canonical-state damage while preserving the failed Lake.</li><li><strong>Risk:</strong> Vendor-source reads and writes to a distinct destination. The command deletes nothing.</li><li><strong>Environment:</strong> macOS, installed Transcript Lake, and sufficient disk for a second full Lake.</li><li><strong>Preconditions:</strong> Preserve the failed Lake and vendor sources; select a genuinely empty replacement root; capture the original error and status.</li><li><strong>Inputs:</strong> The old <code>LAKE_DATA</code> and a different empty absolute destination.</li><li><strong>Artifacts and side effects:</strong> <code>rebuild</code> reads complete selected vendor histories and writes a separate Lake, cursors, and Oko projection. The old root remains untouched. Vendor history no longer present in the sources cannot be reconstructed from those sources.</li><li><strong>Steps:</strong></li></ol>
 <div class="code-block"><div class="code-label">sh</div><pre><code>OLD=&quot;/absolute/operator-owned/lake-failed&quot;
 NEW=&quot;/absolute/operator-owned/lake-rebuild&quot;
 transcript-lake --data-dir &quot;$OLD&quot; doctor --json
