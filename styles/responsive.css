@@ -1,0 +1,70 @@
+/* Everything that changes with the viewport, and the reduced-motion
+   preference, in one place so a breakpoint is never in two files. */
+
+
+@media (max-width: 1120px) {
+  .hero { grid-template-columns: 1fr; }
+  .lake-visual { width: min(720px, 100%); margin: 0 auto; }
+  .proof-strip div { padding: 1.4rem; }
+  .pipeline-section { grid-template-columns: 1fr; }
+  .article-layout { grid-template-columns: minmax(0, 1fr); }
+  .page-toc { display: none; }
+}
+
+@media (max-width: 860px) {
+  .site-header, .hero, .proof-strip, .feature-section, .pipeline-section, .site-footer { width: min(100% - 2rem, 720px); }
+  .hero { min-height: 0; padding: 5rem 0; }
+  .hero h1 { font-size: clamp(3.6rem, 12vw, 6rem); }
+  .proof-strip { grid-template-columns: repeat(2, 1fr); }
+  .proof-strip div:nth-child(2) { border-right: 0; }
+  .proof-strip div:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+  .section-heading { grid-template-columns: 1fr; gap: 1rem; }
+  .feature-grid { grid-template-columns: 1fr; }
+  .pipeline-section { padding: 4rem 2rem; }
+  .docs-callout { grid-template-columns: 1fr; padding: 5rem 2rem; }
+  .site-footer { grid-template-columns: 1fr auto; min-height: 110px; }
+  .site-footer > p:first-of-type { display: none; }
+
+  .docs-layout { display: block; }
+  #docs-nav { position: fixed; inset: 80px auto 0 0; z-index: 80; width: min(330px, 88vw); height: calc(100vh - 80px); transform: translateX(-105%); transition: transform .25s ease; box-shadow: 20px 0 50px rgba(0,0,0,.35); }
+  .docs-page.nav-open #docs-nav { transform: translateX(0); }
+  .docs-menu-button { position: sticky; top: 0; z-index: 70; width: 100%; min-height: 44px; display: block; border: 0; border-bottom: 1px solid var(--line); background: rgba(7,18,26,.94); color: var(--cyan); font: 500 .62rem var(--mono); text-transform: uppercase; letter-spacing: .09em; }
+  .article-layout { width: min(100% - 2.4rem, 740px); }
+  .doc-article { padding-top: 3.5rem; }
+  .docs-index { padding: 0 1.3rem 5rem; }
+  .docs-hero { padding-top: 4rem; }
+  .docs-card-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px) {
+  .site-header { min-height: 70px; }
+  .brand-name { display: none; }
+  .top-nav { gap: 1rem; font-size: .62rem; }
+  .hero h1 { font-size: clamp(3.25rem, 16vw, 4.7rem); }
+  .hero-actions { flex-direction: column; }
+  .copy-command { min-width: 0; width: 100%; }
+  .lake-visual { min-height: 390px; grid-template-columns: 82px 1fr 96px; }
+  .source-column span, .query-chip { padding: .55rem .45rem; font-size: .5rem; }
+  .lake-core { width: 130px; }
+  .lake-core strong { font-size: 1.7rem; }
+  .proof-strip div { min-height: 105px; padding: 1rem; flex-direction: column; align-items: flex-start; }
+  .proof-strip span { text-align: left; }
+  .feature-section { padding: 7rem 0; }
+  .section-heading h2, .pipeline-copy h2, .docs-callout h2 { font-size: 3rem; }
+  .feature-grid article { padding: 1.5rem; }
+  .pipeline-section { padding: 3.5rem 1.2rem; }
+  .terminal-card pre { padding: 1.2rem; font-size: .6rem; }
+  .article-header h1 { font-size: 2.8rem; }
+  .article-content h2 { font-size: 1.8rem; }
+  .article-pagination { grid-template-columns: 1fr; }
+  .article-pagination .next { grid-column: 1; }
+  .cli-command-tree li { grid-template-columns: 1fr; }
+  .cli-command-tree small { grid-column: 1; }
+  .docs-hero h1 { font-size: 3.5rem; }
+  .docs-page .site-header { padding: 0 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}

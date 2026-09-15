@@ -1,0 +1,12 @@
+# Audit exclusions for `tama find-violations`: paths fixed by something
+# outside this project.
+#
+# The repository root is the site root. Vercel serves every file here at its
+# own path, so the path IS the public address: index.html is the home page,
+# robots.txt and sitemap.xml are well-known URLs crawlers fetch by name,
+# favicon.svg is the icon, styles.css is the stylesheet seventy pages link,
+# and script.js the script they load. vercel.json, .gitignore and
+# .wisent-release.json are read by their tools at exactly this path, and
+# VERSION is the version source .wisent-release.json names. Moving any of
+# them renames a public address or breaks a tool.
+.
