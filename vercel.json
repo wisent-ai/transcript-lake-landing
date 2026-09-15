@@ -1,4 +1,6 @@
 {
+  "buildCommand": "python3 scripts/build_search_index.py",
+  "outputDirectory": ".",
   "cleanUrls": true,
   "trailingSlash": true,
   "headers": [
