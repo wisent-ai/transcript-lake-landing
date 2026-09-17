@@ -1,4 +1,6 @@
 (() => {
+  // How long the button reports the outcome before it offers to copy again.
+  const COPY_LABEL_RESET_MS = 1800;
   const copyButton = document.querySelector('[data-copy]');
   if (copyButton) {
     copyButton.addEventListener('click', async () => {
@@ -9,7 +11,7 @@
       } catch {
         if (label) label.textContent = 'Select';
       }
-      window.setTimeout(() => { if (label) label.textContent = 'Copy'; }, 1800);
+      window.setTimeout(() => { if (label) label.textContent = 'Copy'; }, COPY_LABEL_RESET_MS);
     });
   }
 
