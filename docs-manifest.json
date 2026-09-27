@@ -2,6 +2,13 @@
   "website_repository": "wisent-ai/transcript-lake-landing",
   "canonical_base": "https://transcript-lake.wisent.com/docs/",
   "topic_count": 69,
+  "groups": [
+    {"name": "Start here"},
+    {"name": "Understand"},
+    {"name": "Concepts"},
+    {"name": "Operate", "categories": ["CLI"]},
+    {"name": "Examples"}
+  ],
   "topics": [
     {
       "source": "docs/core/index.html",

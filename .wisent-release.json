@@ -12,11 +12,7 @@
       "quality": [
         {
           "name": "canonical-documentation-index",
-          "argv": [
-            "python3",
-            "scripts/build_search_index.py",
-            "--check"
-          ]
+          "argv": ["stado", "product", "documentation", "index", "--check"]
         },
         {
           "name": "web-quality",
