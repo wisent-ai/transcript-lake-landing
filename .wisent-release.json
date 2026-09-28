@@ -11,10 +11,6 @@
       "runner_platform": "darwin-arm64",
       "quality": [
         {
-          "name": "canonical-documentation-index",
-          "argv": ["stado", "product", "documentation", "index", "--check"]
-        },
-        {
           "name": "web-quality",
           "argv": [
             "stado",
@@ -30,6 +26,9 @@
           "build"
         ]
       },
+      "tests": [
+        {"name": "canonical-documentation-index", "argv": ["stado", "product", "documentation", "index", "--check"]}
+      ],
       "stage": {
         "dist/transcript-lake-landing-web.tar.gz": "transcript-lake-landing-web.tar.gz",
         "dist/transcript-lake-landing-web.tar.gz.sha256": "transcript-lake-landing-web.tar.gz.sha256",
