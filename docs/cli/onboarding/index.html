@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>transcript-lake help — Transcript Lake</title>
-  <meta name="description" content="Print general guidance or exact syntax for one public top-level command.">
+  <title>transcript-lake onboarding — Transcript Lake</title>
+  <meta name="description" content="Walk the first-use journey and optionally adopt one discovered source through the canonical ingestion boundary.">
   <meta name="theme-color" content="#07121a">
-  <meta property="og:title" content="transcript-lake help — Transcript Lake">
-  <meta property="og:description" content="Print general guidance or exact syntax for one public top-level command.">
+  <meta property="og:title" content="transcript-lake onboarding — Transcript Lake">
+  <meta property="og:description" content="Walk the first-use journey and optionally adopt one discovered source through the canonical ingestion boundary.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://transcript-lake.wisent.com/docs/cli/help/">
-  <link rel="canonical" href="https://transcript-lake.wisent.com/docs/cli/help/">
+  <meta property="og:url" content="https://transcript-lake.wisent.com/docs/cli/onboarding/">
+  <link rel="canonical" href="https://transcript-lake.wisent.com/docs/cli/onboarding/">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,22 +34,22 @@
   <main class="docs-main" id="main">
     <div class="article-layout">
       <article class="doc-article">
-        <header class="article-header"><p class="eyebrow">Documentation / CLI</p><h1>transcript-lake help</h1><p>Print general guidance or exact syntax for one public top-level command.</p></header>
+        <header class="article-header"><p class="eyebrow">Documentation / CLI</p><h1>transcript-lake onboarding</h1><p>Walk the first-use journey and optionally adopt one discovered source through the canonical ingestion boundary.</p></header>
         <div class="article-content">
 <h2 id="invocation">Invocation<a class="heading-anchor" href="#invocation" aria-label="Link to Invocation">#</a></h2>
-<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake help [command]</code></pre></div>
+<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake [--data-dir &lt;path&gt;] onboarding [--source &lt;runtime&gt; --root &lt;discovered-root&gt;] [--skip-source] [--reset] [--yes] [--json]</code></pre></div>
 <h2 id="purpose">Purpose<a class="heading-anchor" href="#purpose" aria-label="Link to Purpose">#</a></h2>
-<p>Print general guidance or exact syntax for one public top-level command.</p>
+<p>Present the published first-use journey screen by screen, and on its source step either adopt one discovered root through the same masking, cursor and Oko boundary as <a href="/docs/cli/adopt/"><code>adopt</code></a>, or leave an empty usable Lake. First success is recorded only when a source was really adopted; a walkthrough viewed, or a source step skipped, records no first-success fact. The journey itself is on the <a href="/docs/onboarding/">Onboarding</a> page.</p>
 <h2 id="inputs-and-options">Inputs and options<a class="heading-anchor" href="#inputs-and-options" aria-label="Link to Inputs and options">#</a></h2>
-<ul><li>Optional <code>[command]</code> is one exact top-level command name. Nested names are documented through their group help and dedicated web pages.</li><li>No global state selection is needed because help does not read the Lake.</li></ul>
+<ul><li><code>--source &lt;runtime&gt;</code> and <code>--root &lt;discovered-root&gt;</code> name the one source to adopt; they travel together. Without them the source step reports the exact <code>adopt</code> command to run and stops there.</li><li><code>--skip-source</code> leaves an empty usable Lake and does not claim first success; it cannot be combined with <code>--source</code>.</li><li><code>--reset</code> discards the recorded attempt and replays the journey from its entry screen.</li><li><code>--yes</code> answers the Enter prompts; <code>--json</code> emits the whole walk as one object and never prompts, because machine output has no reader to press Enter.</li><li>Global <code>--data-dir &lt;path&gt;</code> selects the Lake root for this invocation.</li></ul>
 <h2 id="output-and-state">Output and state effect<a class="heading-anchor" href="#output-and-state" aria-label="Link to Output and state effect">#</a></h2>
-<p>Read-only and state-free. With no topic it prints the general usage tree. With one known topic it prefixes that command’s syntax and safety guidance with <code>Usage: transcript-lake [--data-dir &lt;path&gt;]</code>.</p>
+<p>Writes the journey's progress under the Lake root as it advances, so a later run resumes rather than restarts; a journey already completed is reported as such and nothing more is written. Adopting a source writes exactly what <code>adopt</code> writes and persists the selected native identity in <code>sources.json</code>. Human output prints each screen with its title, body and command; JSON emits one object holding every screen shown, the notes and the evidence recorded.</p>
 <h2 id="refusals">Exact refusals<a class="heading-anchor" href="#refusals" aria-label="Link to Exact refusals">#</a></h2>
-<ul><li>More than one topic: <code>help accepts at most one command name</code>.</li><li>Unknown topic: <code>unknown help topic: &lt;topic&gt;</code>.</li></ul>
+<ul><li><code>onboarding requires --source and --root together</code> when only one of the pair is given.</li><li><code>use either --source/--root or --skip-source</code> when both are given.</li><li>A positional argument is refused as <code>onboarding accepts flags only</code>; an unrecognized flag as <code>unknown onboarding flag: --wat</code>; a repeated one as <code>onboarding received duplicate &lt;flag&gt;</code>.</li><li>The adoption refusals of <a href="/docs/cli/adopt/"><code>adopt</code></a> when the named source cannot be ingested; <code>source adoption returned without a persisted selection</code> and <code>an adopted source does not satisfy the published journey</code> when it was ingested but the journey's evidence was not met.</li><li><code>published first-success evidence was not satisfied</code>, <code>published journey has no eligible next screen</code>, <code>published onboarding screen has no kind</code>, <code>onboarding state has no current screen</code>, <code>onboarding state is not an object</code> — a journey definition or a recorded state that does not match the published journey.</li></ul>
 <p>All long flags are exact and single-use. A value flag never consumes another <code>--flag</code>. Global <code>--data-dir</code> may appear anywhere in the invocation, must appear once, and selects an absolute root.</p>
 <p><a href="/docs/cli/">Back to the complete CLI command tree.</a></p>
 </div>
-        <nav class="article-pagination" aria-label="Adjacent documentation"><a href="/docs/cli/onboarding/"><small>Previous</small><span>← onboarding</span></a><a class="next" href="/docs/runbook/"><small>Next</small><span>Operator runbook →</span></a></nav>
+        <nav class="article-pagination" aria-label="Adjacent documentation"><a href="/docs/cli/clean/"><small>Previous</small><span>← clean</span></a><a class="next" href="/docs/cli/help/"><small>Next</small><span>help →</span></a></nav>
       </article>
       <aside class="page-toc" aria-label="On this page"><strong>On this page</strong><a href="#invocation" class="toc-level-2">Invocation</a><a href="#purpose" class="toc-level-2">Purpose</a><a href="#inputs-and-options" class="toc-level-2">Inputs and options</a><a href="#output-and-state" class="toc-level-2">Output and state effect</a><a href="#refusals" class="toc-level-2">Exact refusals</a></aside>
     </div>

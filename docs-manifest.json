@@ -143,6 +143,10 @@
       "url": "https://transcript-lake.wisent.com/docs/cli/clean/"
     },
     {
+      "source": "docs/cli/onboarding/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/onboarding/"
+    },
+    {
       "source": "docs/cli/help/index.html",
       "url": "https://transcript-lake.wisent.com/docs/cli/help/"
     },
