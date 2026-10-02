@@ -103,6 +103,10 @@
       "url": "https://transcript-lake.wisent.com/docs/cli/label/add/"
     },
     {
+      "source": "docs/cli/label/remove/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/label/remove/"
+    },
+    {
       "source": "docs/cli/label/list/index.html",
       "url": "https://transcript-lake.wisent.com/docs/cli/label/list/"
     },

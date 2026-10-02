@@ -37,15 +37,15 @@
         <header class="article-header"><p class="eyebrow">Documentation / CLI</p><h1>transcript-lake label</h1><p>Route operator label writes and label analytics to a public subcommand.</p></header>
         <div class="article-content">
 <h2 id="invocation">Invocation<a class="heading-anchor" href="#invocation" aria-label="Link to Invocation">#</a></h2>
-<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake [--data-dir &lt;path&gt;] label &lt;add|list|aspects&gt; ...</code></pre></div>
+<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake [--data-dir &lt;path&gt;] label &lt;add|remove|list|aspects&gt; ...</code></pre></div>
 <h2 id="purpose">Purpose<a class="heading-anchor" href="#purpose" aria-label="Link to Purpose">#</a></h2>
 <p>Route operator label writes and label analytics to a public subcommand.</p>
 <h2 id="inputs-and-options">Inputs and options<a class="heading-anchor" href="#inputs-and-options" aria-label="Link to Inputs and options">#</a></h2>
-<ul><li>A required subcommand selects <a href="/docs/cli/label/add/"><code>add</code></a>, <a href="/docs/cli/label/list/"><code>list</code></a>, or <a href="/docs/cli/label/aspects/"><code>aspects</code></a>.</li><li>Subcommand-specific inputs and options follow the subcommand.</li></ul>
+<ul><li>A required subcommand selects <a href="/docs/cli/label/add/"><code>add</code></a>, <a href="/docs/cli/label/remove/"><code>remove</code></a>, <a href="/docs/cli/label/list/"><code>list</code></a>, or <a href="/docs/cli/label/aspects/"><code>aspects</code></a>.</li><li>Subcommand-specific inputs and options follow the subcommand.</li></ul>
 <h2 id="output-and-state">Output and state effect<a class="heading-anchor" href="#output-and-state" aria-label="Link to Output and state effect">#</a></h2>
-<p>The group command performs no work by itself. <code>add</code> appends one durable label; <code>list</code> and <code>aspects</code> read current label assignments through DuckDB.</p>
+<p>The group command performs no work by itself. <code>add</code> appends one durable label and <code>remove</code> appends its withdrawal; <code>list</code> and <code>aspects</code> read the label assignments in force through DuckDB.</p>
 <h2 id="refusals">Exact refusals<a class="heading-anchor" href="#refusals" aria-label="Link to Exact refusals">#</a></h2>
-<ul><li>A missing or unknown subcommand is refused as <code>usage: transcript-lake label &lt;add|list|aspects&gt; (see: transcript-lake help label)</code>.</li></ul>
+<ul><li>A missing or unknown subcommand is refused as <code>usage: transcript-lake label &lt;add|remove|list|aspects&gt; (see: transcript-lake help label)</code>.</li></ul>
 <p>All long flags are exact and single-use. A value flag never consumes another <code>--flag</code>. Global <code>--data-dir</code> may appear anywhere in the invocation, must appear once, and selects an absolute root.</p>
 <p><a href="/docs/cli/">Back to the complete CLI command tree.</a></p>
 </div>

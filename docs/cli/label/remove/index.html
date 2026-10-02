@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>transcript-lake label add — Transcript Lake</title>
-  <meta name="description" content="Append one durable, provenance-bearing label to an existing Lake session.">
+  <title>transcript-lake label remove — Transcript Lake</title>
+  <meta name="description" content="Withdraw the label in force for one session and aspect by appending a record with no value; the history stays whole.">
   <meta name="theme-color" content="#07121a">
-  <meta property="og:title" content="transcript-lake label add — Transcript Lake">
-  <meta property="og:description" content="Append one durable, provenance-bearing label to an existing Lake session.">
+  <meta property="og:title" content="transcript-lake label remove — Transcript Lake">
+  <meta property="og:description" content="Withdraw the label in force for one session and aspect by appending a record with no value; the history stays whole.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://transcript-lake.wisent.com/docs/cli/label/add/">
-  <link rel="canonical" href="https://transcript-lake.wisent.com/docs/cli/label/add/">
+  <meta property="og:url" content="https://transcript-lake.wisent.com/docs/cli/label/remove/">
+  <link rel="canonical" href="https://transcript-lake.wisent.com/docs/cli/label/remove/">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,22 +34,22 @@
   <main class="docs-main" id="main">
     <div class="article-layout">
       <article class="doc-article">
-        <header class="article-header"><p class="eyebrow">Documentation / CLI</p><h1>transcript-lake label add</h1><p>Append one durable, provenance-bearing label to an existing Lake session.</p></header>
+        <header class="article-header"><p class="eyebrow">Documentation / CLI</p><h1>transcript-lake label remove</h1><p>Withdraw the label in force for one session and aspect by appending a record with no value; the history stays whole.</p></header>
         <div class="article-content">
 <h2 id="invocation">Invocation<a class="heading-anchor" href="#invocation" aria-label="Link to Invocation">#</a></h2>
-<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake [--data-dir &lt;path&gt;] label add &lt;session-id&gt; --aspect &lt;name&gt; --value &lt;v&gt; [--note &lt;text&gt;] [--runtime &lt;r&gt;] [--source &lt;name[:detail]&gt;] [--json]</code></pre></div>
+<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake [--data-dir &lt;path&gt;] label remove &lt;session-id&gt; --aspect &lt;name&gt; [--note &lt;text&gt;] [--runtime &lt;r&gt;] [--source &lt;name[:detail]&gt;] [--json]</code></pre></div>
 <h2 id="purpose">Purpose<a class="heading-anchor" href="#purpose" aria-label="Link to Purpose">#</a></h2>
-<p>Append one durable, provenance-bearing label to an existing Lake session.</p>
+<p>The counterpart of <a href="/docs/cli/label/add/"><code>label add</code></a>. The label store is append-only, so a withdrawal is one more record — the same shape as an assignment, with no <code>value</code>. It becomes the latest row for its session and aspect, and <code>label list</code> and <code>label aspects</code>, which keep only the latest row with a value, then show no assignment in force. Nothing is deleted: the <code>labels</code> view and <code>query</code> still read every assignment and every withdrawal.</p>
 <h2 id="inputs-and-options">Inputs and options<a class="heading-anchor" href="#inputs-and-options" aria-label="Link to Inputs and options">#</a></h2>
-<ul><li>Required <code>&lt;session-id&gt;</code>, non-empty <code>--aspect &lt;name&gt;</code>, and non-empty <code>--value &lt;v&gt;</code>.</li><li>Optional <code>--note &lt;text&gt;</code>, <code>--runtime &lt;r&gt;</code>, and <code>--json</code>. Runtime accepts <code>claude</code>, <code>codex</code>, <code>omp</code>, <code>droid</code>, <code>kimi</code>, or <code>hooks</code>.</li><li><code>--source</code> defaults to <code>manual</code> and accepts <code>manual</code>, <code>human</code>, <code>model</code>, or <code>brama</code>, optionally followed by <code>:detail</code>.</li></ul>
+<ul><li>Required <code>&lt;session-id&gt;</code> and non-empty <code>--aspect &lt;name&gt;</code>.</li><li>Optional <code>--note &lt;text&gt;</code> saying why, <code>--runtime &lt;r&gt;</code> to disambiguate a session id held under several runtimes, and <code>--json</code>.</li><li><code>--source</code> defaults to <code>manual</code> and accepts <code>manual</code>, <code>human</code>, <code>model</code>, or <code>brama</code>, optionally followed by <code>:detail</code>, so a withdrawal carries provenance as an assignment does.</li></ul>
 <h2 id="output-and-state">Output and state effect<a class="heading-anchor" href="#output-and-state" aria-label="Link to Output and state effect">#</a></h2>
-<p>Mutating. Resolves exactly one existing session/runtime, appends one complete record to <code>labels/labels.ndjson</code>, and fsyncs before success. It does not take the event-writer lease. Human output confirms the assignment; JSON emits the record.</p>
+<p>Mutating. Resolves exactly one existing session/runtime, checks that a label for the aspect is in force, appends one complete record with <code>value: null</code> to <code>labels/labels.ndjson</code>, and fsyncs before success. It does not take the event-writer lease. Human output prints <code>removed the &lt;aspect&gt; label of &lt;session-id&gt; (&lt;runtime&gt;)</code>; JSON emits the record. Running it again for the same session and aspect is refused, so a withdrawal is never repeated.</p>
 <h2 id="refusals">Exact refusals<a class="heading-anchor" href="#refusals" aria-label="Link to Exact refusals">#</a></h2>
-<ul><li>Missing aspect: <code>--aspect must be a non-empty string</code>.</li><li>Missing value: <code>--value must be a non-empty string</code>.</li><li>Unknown session: <code>unknown session &quot;&lt;session-id&gt;&quot;: not present in the selected Lake (check the id or start the stream first)</code>.</li><li>Ambiguous runtime: <code>session id &quot;&lt;session-id&gt;&quot; is ambiguous across runtimes (&lt;runtimes&gt;); repeat with --runtime</code>.</li><li>Invalid provenance: <code>--source must match ^(manual|human|model|brama)(:[A-Za-z0-9._/-]+)?$ (manual, human, model, or brama, with an optional :detail suffix)</code>.</li></ul>
+<ul><li>Missing aspect: <code>--aspect must be a non-empty string</code>.</li><li>No assignment to withdraw: <code>session &quot;&lt;session-id&gt;&quot; has no &lt;aspect&gt; label in force; nothing to remove</code>.</li><li>Unknown session: <code>unknown session &quot;&lt;session-id&gt;&quot;: not present in the selected Lake (check the id or start the stream first)</code>.</li><li>Ambiguous runtime: <code>session id &quot;&lt;session-id&gt;&quot; is ambiguous across runtimes (&lt;runtimes&gt;); repeat with --runtime</code>; a runtime the session is not held under: <code>session &quot;&lt;session-id&gt;&quot; exists under &lt;runtimes&gt;, not &lt;runtime&gt;</code>.</li><li>Invalid provenance: <code>--source must match ^(manual|human|model|brama)(:[A-Za-z0-9._/-]+)?$ (manual, human, model, or brama, with an optional :detail suffix)</code>.</li></ul>
 <p>All long flags are exact and single-use. A value flag never consumes another <code>--flag</code>. Global <code>--data-dir</code> may appear anywhere in the invocation, must appear once, and selects an absolute root.</p>
 <p><a href="/docs/cli/">Back to the complete CLI command tree.</a></p>
 </div>
-        <nav class="article-pagination" aria-label="Adjacent documentation"><a href="/docs/cli/label/"><small>Previous</small><span>← label</span></a><a class="next" href="/docs/cli/label/remove/"><small>Next</small><span>label remove →</span></a></nav>
+        <nav class="article-pagination" aria-label="Adjacent documentation"><a href="/docs/cli/label/add/"><small>Previous</small><span>← label add</span></a><a class="next" href="/docs/cli/label/list/"><small>Next</small><span>label list →</span></a></nav>
       </article>
       <aside class="page-toc" aria-label="On this page"><strong>On this page</strong><a href="#invocation" class="toc-level-2">Invocation</a><a href="#purpose" class="toc-level-2">Purpose</a><a href="#inputs-and-options" class="toc-level-2">Inputs and options</a><a href="#output-and-state" class="toc-level-2">Output and state effect</a><a href="#refusals" class="toc-level-2">Exact refusals</a></aside>
     </div>
