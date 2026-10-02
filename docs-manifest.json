@@ -1,7 +1,7 @@
 {
   "website_repository": "wisent-ai/transcript-lake-landing",
   "canonical_base": "https://transcript-lake.wisent.com/docs/",
-  "topic_count": 69,
+  "topic_count": 68,
   "groups": [
     {"name": "Start here"},
     {"name": "Understand"},
@@ -135,12 +135,8 @@
       "url": "https://transcript-lake.wisent.com/docs/cli/compact/"
     },
     {
-      "source": "docs/cli/rebuild-oko/index.html",
-      "url": "https://transcript-lake.wisent.com/docs/cli/rebuild-oko/"
-    },
-    {
-      "source": "docs/cli/oko-refresh/index.html",
-      "url": "https://transcript-lake.wisent.com/docs/cli/oko-refresh/"
+      "source": "docs/cli/projection/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/projection/"
     },
     {
       "source": "docs/cli/clean/index.html",

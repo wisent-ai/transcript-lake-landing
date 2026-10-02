@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>transcript-lake rebuild-oko — Transcript Lake</title>
-  <meta name="description" content="Reconstruct the complete Oko session projection from authoritative Lake partitions.">
+  <title>transcript-lake projection — Transcript Lake</title>
+  <meta name="description" content="Reconstruct the per-session projection one consumer imports from authoritative Lake partitions, or hand the current projection to that consumer's own CLI; the consumer is an adapter behind the operation.">
   <meta name="theme-color" content="#07121a">
-  <meta property="og:title" content="transcript-lake rebuild-oko — Transcript Lake">
-  <meta property="og:description" content="Reconstruct the complete Oko session projection from authoritative Lake partitions.">
+  <meta property="og:title" content="transcript-lake projection — Transcript Lake">
+  <meta property="og:description" content="Reconstruct the per-session projection one consumer imports from authoritative Lake partitions, or hand the current projection to that consumer's own CLI; the consumer is an adapter behind the operation.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://transcript-lake.wisent.com/docs/cli/rebuild-oko/">
-  <link rel="canonical" href="https://transcript-lake.wisent.com/docs/cli/rebuild-oko/">
+  <meta property="og:url" content="https://transcript-lake.wisent.com/docs/cli/projection/">
+  <link rel="canonical" href="https://transcript-lake.wisent.com/docs/cli/projection/">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,22 +34,22 @@
   <main class="docs-main" id="main">
     <div class="article-layout">
       <article class="doc-article">
-        <header class="article-header"><p class="eyebrow">Documentation / CLI</p><h1>transcript-lake rebuild-oko</h1><p>Reconstruct the complete Oko session projection from authoritative Lake partitions.</p></header>
+        <header class="article-header"><p class="eyebrow">Documentation / CLI</p><h1>transcript-lake projection</h1><p>Reconstruct the per-session projection one consumer imports from authoritative Lake partitions, or hand the current projection to that consumer's own CLI; the consumer is an adapter behind the operation.</p></header>
         <div class="article-content">
 <h2 id="invocation">Invocation<a class="heading-anchor" href="#invocation" aria-label="Link to Invocation">#</a></h2>
-<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake [--data-dir &lt;path&gt;] rebuild-oko [--reindex]</code></pre></div>
+<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake [--data-dir &lt;path&gt;] projection &lt;rebuild|refresh&gt; --target &lt;oko&gt; [--reindex]</code></pre></div>
 <h2 id="purpose">Purpose<a class="heading-anchor" href="#purpose" aria-label="Link to Purpose">#</a></h2>
-<p>Reconstruct the complete Oko session projection from authoritative Lake partitions.</p>
+<p><code>projection rebuild --target &lt;consumer&gt;</code> reconstructs every per-session projection that consumer imports from the authoritative Lake partitions; the live stream owns incremental updates, and this is the recovery path. <code>projection refresh --target &lt;consumer&gt;</code> hands the projection as it stands to the consumer through its own CLI. The consumer is a replaceable adapter behind the one operation: <code>oko</code> is the target that exists today, and a <code>--target</code> without an adapter is refused with the targets that exist.</p>
 <h2 id="inputs-and-options">Inputs and options<a class="heading-anchor" href="#inputs-and-options" aria-label="Link to Inputs and options">#</a></h2>
-<ul><li>No positional input is accepted.</li><li><code>--reindex</code> asks Oko to reindex after reconstruction; without it Oko is not invoked.</li><li>Requires the single state-writer lease.</li></ul>
+<ul><li>The verb, <code>rebuild</code> or <code>refresh</code>, is the first word; no other positional input is accepted.</li><li><code>--target &lt;consumer&gt;</code> is required on both verbs. For <code>oko</code> the projection is the per-session JSONL under <code>LAKE_DATA/exports/oko</code>, and <code>refresh</code> runs <code>oko-cli transcripts reindex</code> (<code>OKO_CLI</code> names the executable; otherwise it is searched on <code>PATH</code>).</li><li><code>--reindex</code>, on <code>rebuild</code> only, asks the consumer to reindex after reconstruction; without it the consumer is not invoked.</li><li><code>rebuild</code> requires the single state-writer lease.</li></ul>
 <h2 id="output-and-state">Output and state effect<a class="heading-anchor" href="#output-and-state" aria-label="Link to Output and state effect">#</a></h2>
-<p>Mutates derived Oko export and staging data, preserving canonical partitions and cursors. Always writes a JSON summary with output root, session/record counts, written/unchanged/pruned counts, mode, malformed count, and duration. With <code>--reindex</code>, returns non-zero unless Oko both ran and exited zero.</p>
+<p><code>rebuild</code> mutates the consumer's derived export and staging data, preserving canonical partitions and cursors. It always writes a JSON summary with output root, session/record counts, written/unchanged/pruned counts, mode, malformed count, and duration. With <code>--reindex</code>, it returns non-zero unless the consumer both ran and exited zero. <code>refresh</code> writes nothing of its own: it runs the consumer's reindex command and returns that command's exit status.</p>
 <h2 id="refusals">Exact refusals<a class="heading-anchor" href="#refusals" aria-label="Link to Exact refusals">#</a></h2>
-<ul><li>Malformed authoritative rows: <code>full Oko export refused malformed Lake rows; authoritative partitions were not modified</code>.</li><li>Writer contention is refused as <code>state writer lock is held by &lt;host&gt; pid &lt;pid&gt;</code>.</li><li>A positional argument is refused as <code>rebuild-oko accepts flags only</code>.</li><li>Unknown or duplicate flags use the exact parser forms <code>unknown rebuild-oko flag: --wat</code> and <code>rebuild-oko received duplicate --reindex</code>.</li></ul>
+<ul><li>A missing verb is refused as <code>projection requires rebuild or refresh</code>; another word as <code>projection takes rebuild or refresh, not &lt;word&gt;</code>.</li><li>A missing target is refused as <code>projection rebuild requires --target &lt;oko&gt;</code> (and the same for <code>refresh</code>); a target without an adapter as <code>no projection target is named &lt;target&gt;; the targets are oko</code>.</li><li>Malformed authoritative rows: <code>full Oko export refused malformed Lake rows; authoritative partitions were not modified</code>.</li><li>Writer contention is refused as <code>state writer lock is held by &lt;host&gt; pid &lt;pid&gt;</code>.</li><li>A positional argument after the verb is refused as <code>projection rebuild accepts flags only</code>; unknown or duplicate flags use the exact parser forms <code>unknown projection rebuild flag: --wat</code> and <code>projection rebuild received duplicate --reindex</code>.</li><li><code>refresh</code> without a consumer CLI prints <code>oko-cli is not on PATH; install Oko or set OKO_CLI, then run: oko-cli transcripts reindex</code> and exits 1.</li></ul>
 <p>All long flags are exact and single-use. A value flag never consumes another <code>--flag</code>. Global <code>--data-dir</code> may appear anywhere in the invocation, must appear once, and selects an absolute root.</p>
 <p><a href="/docs/cli/">Back to the complete CLI command tree.</a></p>
 </div>
-        <nav class="article-pagination" aria-label="Adjacent documentation"><a href="/docs/cli/compact/"><small>Previous</small><span>← compact</span></a><a class="next" href="/docs/cli/oko-refresh/"><small>Next</small><span>oko-refresh →</span></a></nav>
+        <nav class="article-pagination" aria-label="Adjacent documentation"><a href="/docs/cli/compact/"><small>Previous</small><span>← compact</span></a><a class="next" href="/docs/cli/clean/"><small>Next</small><span>clean →</span></a></nav>
       </article>
       <aside class="page-toc" aria-label="On this page"><strong>On this page</strong><a href="#invocation" class="toc-level-2">Invocation</a><a href="#purpose" class="toc-level-2">Purpose</a><a href="#inputs-and-options" class="toc-level-2">Inputs and options</a><a href="#output-and-state" class="toc-level-2">Output and state effect</a><a href="#refusals" class="toc-level-2">Exact refusals</a></aside>
     </div>

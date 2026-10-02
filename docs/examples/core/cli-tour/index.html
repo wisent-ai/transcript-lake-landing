@@ -59,7 +59,7 @@ transcript-lake --data-dir &quot;$LAKE&quot; label aspects --json</code></pre></
 <div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake --data-dir &quot;$LAKE&quot; query &quot;SELECT * FROM tokens_daily ORDER BY day DESC&quot;
 transcript-lake --data-dir &quot;$LAKE&quot; signals --report freshness
 transcript-lake --data-dir &quot;$LAKE&quot; compact --source codex
-transcript-lake --data-dir &quot;$LAKE&quot; rebuild-oko --reindex
+transcript-lake --data-dir &quot;$LAKE&quot; projection rebuild --target oko --reindex
 transcript-lake --data-dir &quot;$LAKE&quot; clean --target all
 transcript-lake --data-dir &quot;$LAKE&quot; rebuild --to &quot;/absolute/operator-owned/lake-rebuild&quot;</code></pre></div>
 <p><code>clean</code> is a preview unless <code>--apply</code> is present. <code>rebuild</code> rejects the current or any non-empty target.</p>

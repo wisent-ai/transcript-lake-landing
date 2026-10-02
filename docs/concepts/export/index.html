@@ -38,7 +38,7 @@
         <div class="article-content"><p>An export is a rebuildable representation of authoritative NDJSON partitions.</p>
 <h2 id="oko-export">Oko export<a class="heading-anchor" href="#oko-export" aria-label="Link to Oko export">#</a></h2>
 <p><code>LAKE_DATA/exports/oko/runtime=&lt;runtime&gt;/&lt;session-hash&gt;.jsonl</code> groups conversation events per session using the <code>oko-import-v1</code> line schema. Deterministic event UUIDs make replays deduplicable; rows sort by timestamp then UUID. <code>export-cursors.json</code> tracks partition size, physical size, and mtime for incremental refresh.</p>
-<p>Oko reads this projection. Oko does not own it, write the Lake, or replace masking. <code>rebuild-oko</code> reconstructs it; <code>oko-refresh</code> asks Oko to reindex the current export.</p>
+<p>Oko reads this projection. Oko does not own it, write the Lake, or replace masking. <code>projection rebuild --target oko</code> reconstructs it; <code>projection refresh --target oko</code> asks Oko to reindex the current export.</p>
 <h2 id="parquet">Parquet<a class="heading-anchor" href="#parquet" aria-label="Link to Parquet">#</a></h2>
 <p><code>compact</code> writes <code>LAKE_DATA/parquet/runtime=&lt;runtime&gt;/events.parquet</code> through DuckDB. It is an analytical mirror, not a transaction log.</p>
 <p><code>clean --target parquet|oko|all</code> previews derived removal. <code>--apply</code> removes only selected Parquet/Oko trees; it never removes canonical events, cursors, or labels.</p>
