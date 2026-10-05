@@ -40,9 +40,15 @@
 <p>For a detected hit, none of the matched plaintext bytes, including a prefix or suffix, are written to <code>LAKE_DATA</code>. The complete hit becomes:</p>
 <div class="code-block"><div class="code-label">text</div><pre><code>[masked:&lt;class&gt;:&lt;character-count&gt;:&lt;sha256-prefix&gt;]</code></pre></div>
 <p>The fingerprint is the first eight lowercase hex characters of SHA-256 over the complete hit. It is deterministic and non-reversible, but permits equality correlation: the same secret produces the same marker fingerprint.</p>
-<p>Masking is applied in this order:</p>
-<ol><li><strong>assignment</strong> — <code>\b[A-Z][A-Z0-9_]{2,}=[A-Za-z0-9+/=_-]{16,}</code>; the complete name, equals sign, and value are removed.</li><li><strong>token</strong> — <code>\b[a-z]{2,7}-[A-Za-z0-9_-]{20,}</code>; the complete provider-shaped token is removed.</li><li><strong>entropy</strong> — candidate runs of at least 40 characters from <code>[A-Za-z0-9+/=_-]</code>, accepted only with at least 16 distinct characters and at least three of lowercase, uppercase, digit, and symbol groups.</li></ol>
-<p>Assignments run first so a whole <code>NAME=value</code> becomes one marker. Provider tokens run before the generic entropy rule. Existing markers cannot match the hit alphabets, making the transform idempotent.</p>
+<p>What counts as a secret is the operator's declaration. <code>TRANSCRIPT_LAKE_SECRET_FORMATS</code> names a JSON file with exactly three keys, each required; <code>null</code> declares that the class recognises nothing:</p>
+<div class="code-block"><div class="code-label">json</div><pre><code>{
+  "assignment": "&lt;regex for NAME=value hits&gt;",
+  "token": "&lt;regex for provider-shaped tokens&gt;",
+  "entropy": { "pattern": "&lt;regex for candidate runs&gt;", "min_distinct": &lt;n&gt;, "min_groups": &lt;n&gt; }
+}</code></pre></div>
+<p>Without the variable, with an unreadable file, a missing or unknown key, or a pattern that does not compile, <code>stream</code>, <code>adopt</code> and recovery replay refuse to start and name the setting and the file; no text is written under an unstated rule. Masking is applied in this order:</p>
+<ol><li><strong>assignment</strong> — the declared pattern; the complete match is removed.</li><li><strong>token</strong> — the declared pattern; the complete match is removed.</li><li><strong>entropy</strong> — matches of the declared pattern, accepted only with at least <code>min_distinct</code> distinct characters drawn from at least <code>min_groups</code> of the lowercase, uppercase, digit and other groups.</li></ol>
+<p>Assignments run first so a whole <code>NAME=value</code> becomes one marker. Provider tokens run before the generic entropy rule. The transform stays idempotent as long as no declared pattern matches <code>[</code>, <code>:</code> or <code>]</code>, the marker's separators.</p>
 <p>The stream applies the same transform to <code>text</code> and to every string in <code>extra</code>, at every depth, and keeps each value whole. Oversized Claude tool results are referenced, never followed. Kimi configuration and system-prompt records never contribute their text.</p>
 <h2 id="demonstrated-with-synthetic-evidence">Demonstrated with synthetic evidence<a class="heading-anchor" href="#demonstrated-with-synthetic-evidence" aria-label="Link to Demonstrated with synthetic evidence">#</a></h2>
 <p>The executed fixture produced:</p>
