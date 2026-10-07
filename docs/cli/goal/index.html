@@ -41,7 +41,7 @@
 <h2 id="purpose">Purpose<a class="heading-anchor" href="#purpose" aria-label="Link to Purpose">#</a></h2>
 <p>Route local goal-title inference or model-produced goal labeling.</p>
 <h2 id="inputs-and-options">Inputs and options<a class="heading-anchor" href="#inputs-and-options" aria-label="Link to Inputs and options">#</a></h2>
-<ul><li>A required subcommand selects <a href="/docs/cli/goal/title/"><code>title</code></a> or <a href="/docs/cli/goal/label/"><code>label</code></a>.</li><li>The qualified GGUF and local <code>llama-cli</code> runtime are used by both leaves; inference is local.</li></ul>
+<ul><li>A required subcommand selects <a href="/docs/cli/goal/title/"><code>title</code></a> or <a href="/docs/cli/goal/label/"><code>label</code></a>.</li><li>Both leaves run the qualified GGUF on Ster (<code>ster generate</code>), the product that owns local model inference; inference is local.</li></ul>
 <h2 id="output-and-state">Output and state effect<a class="heading-anchor" href="#output-and-state" aria-label="Link to Output and state effect">#</a></h2>
 <p>The group command performs no work by itself. <code>title</code> returns a local title for supplied text; <code>label</code> may append that title as a label for an existing session.</p>
 <h2 id="refusals">Exact refusals<a class="heading-anchor" href="#refusals" aria-label="Link to Exact refusals">#</a></h2>
