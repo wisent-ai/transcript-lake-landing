@@ -41,7 +41,7 @@
 <h2 id="purpose">Purpose<a class="heading-anchor" href="#purpose" aria-label="Link to Purpose">#</a></h2>
 <p>Discover supported transcript and hook stores and count candidate files.</p>
 <h2 id="inputs-and-options">Inputs and options<a class="heading-anchor" href="#inputs-and-options" aria-label="Link to Inputs and options">#</a></h2>
-<ul><li>No positional input is required or accepted.</li><li><code>--json</code> emits an array of source rows.</li><li>The fixed runtime set is <code>claude</code>, <code>codex</code>, <code>omp</code>, <code>droid</code>, <code>kimi</code>, or <code>hooks</code>.</li></ul>
+<ul><li>No positional input is required or accepted.</li><li><code>--json</code> emits an array of source rows.</li><li>The runtime set comes from the installed build's adapter registry, plus <code>hooks</code>. The <a href="/docs/ingestion-reference/#supported-inputs">ingestion reference</a> groups native stores by their line, whole-document, or database reading contract; the command reports the exact roots discovered on this machine.</li></ul>
 <h2 id="output-and-state">Output and state effect<a class="heading-anchor" href="#output-and-state" aria-label="Link to Output and state effect">#</a></h2>
 <p>Read-only. Emits one row per runtime with <code>runtime</code>, <code>available</code>, <code>mode</code>, <code>roots</code>, <code>files</code>, and optional <code>error</code>. A missing store is normal; the exit status is non-zero only when source enumeration recorded an error.</p>
 <h2 id="refusals">Exact refusals<a class="heading-anchor" href="#refusals" aria-label="Link to Exact refusals">#</a></h2>
