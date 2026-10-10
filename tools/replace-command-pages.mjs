@@ -8,6 +8,12 @@
 //   node tools/replace-command-pages.mjs --new <slug> --old <slug> [--old <slug> ...] \
 //     [--mention "<old text>=<new text>" ...]
 //
+//   node tools/replace-command-pages.mjs --refresh
+//
+// --refresh only updates discovery text (home cards, CLI index, search index)
+// from canonical manifest pages. It never retires pages or changes topic counts.
+// Missing required page fields refuse the refresh before any index is written.
+//
 // --old names a page directory under docs/cli to retire; every link to it is
 // pointed at the new page and its index, card, manifest, sitemap and search
 // entries are replaced by the new page's. --mention rewrites a command as it
@@ -18,9 +24,21 @@
 import { existsSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { refresh } from "./refresh-page-indexes.mjs";
 
+const decode = (text) => text
+  .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, "\"")
+  .replace(/&#(x[\da-f]+|\d+);/gi, (_entity, code) => String.fromCodePoint(Number(code.replace(/^x/i, "0x"))))
+  .replace(/&amp;/g, "&");
+const encode = (text) => text
+  .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const escape = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const argv = process.argv.slice(2);
+if (argv.join(" ") === "--refresh") {
+  refresh(root, { decode, encode, escape });
+  process.exit();
+}
 let newSlug = null;
 const oldSlugs = [];
 const mentions = [];
@@ -65,10 +83,6 @@ for (const slug of oldSlugs) {
 
 // --- what the new page says about itself --------------------------------------
 
-const decode = (text) => text
-  .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, "\"").replace(/&#39;/g, "'").replace(/&amp;/g, "&");
-const encode = (text) => text
-  .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const newPage = readFileSync(pagePath(newSlug), "utf8");
 const title = decode(newPage.match(/<h1>([^<]*)<\/h1>/)[1]);
 const summary = decode(newPage.match(/<meta name="description" content="([^"]*)">/)[1]);
@@ -91,7 +105,6 @@ const walk = (directory) => {
 walk(join(root, "docs"));
 pages.push(join(root, "index.html"));
 
-const escape = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const rewriteText = (content) => {
   let out = content;
   for (const slug of oldSlugs) {

@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Architecture — Transcript Lake</title>
-  <meta name="description" content="src/adapters/ implements one pure line parser for Claude, Codex, omp, Factory Droid, and Kimi. src/hooksegments.rs ingests Tama closed segments or the legacy hook log. Adapters own vendor-field interpretation, not masking or IO. Malformed/incomplete lines yiel">
+  <meta name="description" content="Runtime adapters interpret native transcript stores; shared readers handle appended lines and whole stores, then canonicalize, mask, and publish events. Tama telemetry enters through its separate segment reader.">
   <meta name="theme-color" content="#07121a">
   <meta property="og:title" content="Architecture — Transcript Lake">
-  <meta property="og:description" content="src/adapters/ implements one pure line parser for Claude, Codex, omp, Factory Droid, and Kimi. src/hooksegments.rs ingests Tama closed segments or the legacy hook log. Adapters own vendor-field interpretation, not masking or IO. Malformed/incomplete lines yiel">
+  <meta property="og:description" content="Runtime adapters interpret native transcript stores; shared readers handle appended lines and whole stores, then canonicalize, mask, and publish events. Tama telemetry enters through its separate segment reader.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://transcript-lake.wisent.com/docs/architecture/">
   <link rel="canonical" href="https://transcript-lake.wisent.com/docs/architecture/">
@@ -34,7 +34,7 @@
   <main class="docs-main" id="main">
     <div class="article-layout">
       <article class="doc-article">
-        <header class="article-header"><p class="eyebrow">Documentation / Understand</p><h1>Architecture</h1><p>src/adapters/ implements one pure line parser for Claude, Codex, omp, Factory Droid, and Kimi. src/hooksegments.rs ingests Tama closed segments or the legacy hook log. Adapters own vendor-field interpretation, not masking or IO. Malformed/incomplete lines yiel</p></header>
+        <header class="article-header"><p class="eyebrow">Documentation / Understand</p><h1>Architecture</h1><p>Runtime adapters interpret native transcript stores; shared readers handle appended lines and whole stores, then canonicalize, mask, and publish events. Tama telemetry enters through its separate segment reader.</p></header>
         <div class="article-content"><h2 id="data-flow">Data flow<a class="heading-anchor" href="#data-flow" aria-label="Link to Data flow">#</a></h2>
 <div class="code-block"><div class="code-label">text</div><pre><code>vendor stores / Tama closed segments (read-only)
                 |
@@ -54,9 +54,9 @@ read CLI   Parquet   operator labels
            mirror    (separate store)</code></pre></div>
 <h2 id="components">Components<a class="heading-anchor" href="#components" aria-label="Link to Components">#</a></h2>
 <h3 id="adapter-layer">Adapter layer<a class="heading-anchor" href="#adapter-layer" aria-label="Link to Adapter layer">#</a></h3>
-<p><code>src/adapters/</code> implements one pure line parser for Claude, Codex, omp, Factory Droid, and Kimi. <code>src/hook_segments.rs</code> ingests Tama closed segments or the legacy hook log. Adapters own vendor-field interpretation, not masking or IO. Malformed/incomplete lines yield no events because a live transcript commonly ends with a torn line.</p>
+<p><code>src/adapters/</code> implements the runtime registry and native-format adapters. Each adapter discovers roots and sessions, resolves changed paths, and selects appended-line or whole-store reading. Whole stores include JSON documents, SQLite databases, and Markdown logs. <code>transcript-lake sources --json</code> lists the registered runtimes and their roots on this machine. <code>src/hook_segments.rs</code> separately ingests Tama closed segments or the legacy hook log. Adapters interpret vendor fields; shared readers own IO and canonicalization owns masking. Malformed or torn line records yield no events, without discarding complete preceding records.</p>
 <h3 id="stream-layer">Stream layer<a class="heading-anchor" href="#stream-layer" aria-label="Link to Stream layer">#</a></h3>
-<p><code>src/commands/stream.rs</code> installs recursive native filesystem watches before catch-up, so appends during initialization are queued. <code>src/stream.rs</code> discovers cursors, reads only complete appended lines, batches up to 512 canonical events, and maps each source/date to a deterministic partition.</p>
+<p><code>src/commands/stream.rs</code> installs native filesystem watches before catch-up, so changes during initialization are queued. Shared readers follow the adapter's reading mode: consume complete appended lines or re-read a changed whole store. Canonical events map to deterministic source/date partitions. See the <a href="/docs/ingestion-reference/">ingestion reference</a> for store modes and native-store qualification.</p>
 <p>The stream status file moves through <code>catching-up</code>, <code>running</code>, <code>degraded</code>, and final stopped state. Human logs use <code>&lt;timestamp&gt; stream &lt;kind&gt; key=value</code>; <code>--json</code> emits one object per log with <code>ts</code>, <code>kind</code>, and detail fields.</p>
 <h3 id="state-and-leases">State and leases<a class="heading-anchor" href="#state-and-leases" aria-label="Link to State and leases">#</a></h3>
 <p><code>LAKE_DATA/cursors.json</code> maps source paths to <code>mtimeMs</code>, <code>size</code>, and <code>offset</code>. Publication writes <code>.cursors.json.tmp-&lt;pid&gt;-&lt;uuid&gt;</code>, fsyncs it, renames it, then fsyncs the data directory under <code>cursors.lock</code>.</p>
