@@ -16,7 +16,8 @@
             "stado",
             "web",
             "quality"
-          ]
+          ],
+          "kind": "format"
         }
       ],
       "build": {
