@@ -1,18 +1,22 @@
 (() => {
-  // How long the button reports the outcome before it offers to copy again.
-  const COPY_LABEL_RESET_MS = 1800;
+  // The button reports the outcome until the reader moves away from it, then
+  // offers to copy again. A refused copy names the browser's reason.
   const copyButton = document.querySelector('[data-copy]');
   if (copyButton) {
+    const label = copyButton.querySelector('.copy-label');
+    const offerCopy = () => { if (label) label.textContent = 'Copy'; };
     copyButton.addEventListener('click', async () => {
-      const label = copyButton.querySelector('.copy-label');
       try {
         await navigator.clipboard.writeText(copyButton.dataset.copy);
+        copyButton.removeAttribute('title');
         if (label) label.textContent = 'Copied';
-      } catch {
+      } catch (error) {
+        copyButton.title = `The browser refused to copy (${error.message}); select the command to copy it.`;
         if (label) label.textContent = 'Select';
       }
-      window.setTimeout(() => { if (label) label.textContent = 'Copy'; }, COPY_LABEL_RESET_MS);
     });
+    copyButton.addEventListener('pointerleave', offerCopy);
+    copyButton.addEventListener('blur', offerCopy);
   }
 
   const menuButton = document.querySelector('.docs-menu-button');
@@ -36,17 +40,14 @@
     const empty = document.querySelector('.search-empty');
     search.addEventListener('input', () => {
       const query = search.value.trim().toLocaleLowerCase();
-      let visibleCount = 0;
       for (const card of cards) {
         const haystack = `${card.dataset.docTitle} ${card.dataset.docSummary}`.toLocaleLowerCase();
-        const visible = !query || haystack.includes(query);
-        card.hidden = !visible;
-        if (visible) visibleCount += 1;
+        card.hidden = Boolean(query) && !haystack.includes(query);
       }
       for (const group of groups) {
         group.hidden = !group.querySelector('.doc-card:not([hidden])');
       }
-      if (empty) empty.hidden = visibleCount !== 0;
+      if (empty) empty.hidden = cards.some(card => !card.hidden);
     });
   }
 })();
