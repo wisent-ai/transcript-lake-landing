@@ -1,7 +1,6 @@
 {
   "website_repository": "wisent-ai/transcript-lake-landing",
   "canonical_base": "https://transcript-lake.wisent.com/docs/",
-  "topic_count": 68,
   "groups": [
     {"name": "Start here"},
     {"name": "Understand"},
@@ -65,6 +64,10 @@
     {
       "source": "docs/cli/rebuild/index.html",
       "url": "https://transcript-lake.wisent.com/docs/cli/rebuild/"
+    },
+    {
+      "source": "docs/cli/reconcile/index.html",
+      "url": "https://transcript-lake.wisent.com/docs/cli/reconcile/"
     },
     {
       "source": "docs/cli/sessions/index.html",

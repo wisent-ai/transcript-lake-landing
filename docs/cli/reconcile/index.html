@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>transcript-lake reconcile — Transcript Lake</title>
+  <meta name="description" content="Supersede canonical rows that the current adapter projects differently from their retained original.">
+  <meta name="theme-color" content="#07121a">
+  <meta property="og:title" content="transcript-lake reconcile — Transcript Lake">
+  <meta property="og:description" content="Supersede canonical rows that the current adapter projects differently from their retained original.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://transcript-lake.wisent.com/docs/cli/reconcile/">
+  <link rel="canonical" href="https://transcript-lake.wisent.com/docs/cli/reconcile/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="ambient" aria-hidden="true"></div>
+  <div class="docs-shell">
+<header class="site-header">
+  <a class="brand" href="/" aria-label="Transcript Lake home"><span class="brand-mark" aria-hidden="true"><span>T</span>L</span><span class="brand-name">Transcript Lake</span></a>
+  <nav class="top-nav" aria-label="Primary navigation">
+    <a href="/docs/">Documentation</a>
+    <a href="https://github.com/wisent-ai/transcript-lake" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</header>
+<button class="docs-menu-button" type="button" aria-controls="docs-nav" aria-expanded="false">Browse topics</button>
+<div class="docs-layout">
+  <div id="docs-nav"><nav class="docs-sidebar" aria-label="Documentation navigation"><a class="docs-home-link" href="/docs/">Documentation home</a><section class="nav-group"><h2>Start here</h2><a href="/docs/what-is-transcript-lake/">What is Transcript Lake?</a><a href="/docs/quick-start/">Quick start: a synthetic local Lake</a><a href="/docs/onboarding/" >Onboarding</a><a href="/docs/cli/adopt/">Import existing transcripts</a><a href="/docs/configuration/">Configuration reference</a></section><section class="nav-group"><h2>Understand</h2><a href="/docs/architecture/">Architecture</a><a href="/docs/core/">Core functionality contract</a><a href="/docs/lake/">Transcript Lake</a><a href="/docs/ingestion-reference/">Ingestion pipeline reference</a><a href="/docs/masking-guarantees/">Masking guarantees and limits</a></section><section class="nav-group"><h2>Concepts</h2><a href="/docs/concepts/cursor/">Concept: cursor and writer lease</a><a href="/docs/concepts/event/">Concept: canonical event</a><a href="/docs/concepts/export/">Concept: export and derived data</a><a href="/docs/concepts/label/">Concept: label</a><a href="/docs/concepts/masking/">Concept: masking</a><a href="/docs/concepts/partition/">Concept: partition</a><a href="/docs/concepts/runtime/">Concept: runtime and adapter</a><a href="/docs/concepts/session/">Concept: session</a></section><section class="nav-group"><h2>Operate</h2><a href="/docs/cli/" aria-current="page" class="active">CLI command reference</a><a href="/docs/runbook/">Operator runbook</a><a href="/docs/integrations/">Integration contracts</a><a href="/docs/releases/">Release and versioning policy</a><a href="/docs/walkthrough-live-append/">Walkthrough: catch up and commit a synthetic live append</a><a href="/docs/walkthrough-masking-audit/">Walkthrough: audit synthetic masking and derived output</a></section><section class="nav-group"><h2>Examples</h2><a href="/docs/examples/">Transcript Lake examples</a><a href="/docs/examples/core/cli-tour/">CLI tour</a><a href="/docs/examples/core/inspect-zero-state/">Inspect zero state and product identity</a><a href="/docs/examples/core/live-stream/">Keep a Lake current with the live stream</a><a href="/docs/examples/core/query-sessions/">Query cross-runtime sessions</a><a href="/docs/examples/core/restore-a-conversation/">Restore one conversation</a><a href="/docs/examples/failures/representative-failures/">Diagnose representative failures</a><a href="/docs/examples/getting-started/first-local-archive/">Create the first local archive</a><a href="/docs/examples/integrations/duckdb/cross-source-signals/">Query cross-source signals with Oko</a><a href="/docs/examples/integrations/oko/rebuild-oko/">Reconstruct the Oko projection</a><a href="/docs/examples/integrations/oko/reindex-oko/">Reindex Oko after projection changes</a><a href="/docs/examples/integrations/tama/import-hook-decisions/">Stream Tama hook decisions</a><a href="/docs/examples/operations/build-release-assets/">Build release assets</a><a href="/docs/examples/operations/compact-to-parquet/">Compact partitions to Parquet</a><a href="/docs/examples/operations/reset-and-uninstall/">Reset local state and uninstall</a><a href="/docs/examples/operations/upgrade-and-rollback/">Upgrade and roll back an exact release</a><a href="/docs/examples/recovery/rebuild-into-empty-root/">Rebuild into an empty root</a><a href="/docs/examples/synthetic/live-append/">Synthetic example: live append</a><a href="/docs/examples/synthetic/masking-audit/">Synthetic example: masking audit</a></section></nav></div>
+  <main class="docs-main" id="main">
+    <div class="article-layout">
+      <article class="doc-article">
+        <header class="article-header"><p class="eyebrow">Documentation / CLI</p><h1>transcript-lake reconcile</h1><p>Supersede canonical rows that the current adapter projects differently from their retained original.</p></header>
+        <div class="article-content">
+<h2 id="invocation">Invocation<a class="heading-anchor" href="#invocation" aria-label="Link to Invocation">#</a></h2>
+<div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake [--data-dir &lt;path&gt;] reconcile --source &lt;runtime&gt; [--apply] [--reindex]</code></pre></div>
+<h2 id="purpose">Purpose<a class="heading-anchor" href="#purpose" aria-label="Link to Purpose">#</a></h2>
+<p>Canonical partitions are append-only, so rows written before an adapter correction keep the old projection: a provider notice recorded as an operator turn stays one, and Oko imports it as one. <code>reconcile</code> replays every retained original of one runtime through the current adapter and masker into a staging root under the Lake, compares each source partition with what the replay wrote, and with <code>--apply</code> puts the replayed partition in place of each one that differs. The original, not the recorded text, decides every row.</p>
+<h2 id="inputs-and-options">Inputs and options<a class="heading-anchor" href="#inputs-and-options" aria-label="Link to Inputs and options">#</a></h2>
+<ul><li>Required <code>--source &lt;runtime&gt;</code>: one transcript runtime of the adapter registry. Its originals are read from the roots <code>transcript-lake sources</code> lists for it on this machine.</li><li><code>--apply</code>: replace every changed partition. Without it nothing in the Lake changes and the report is a preview.</li><li><code>--reindex</code> (only with <code>--apply</code>): after the Oko projection is rebuilt, run <code>oko-cli transcripts reindex</code> (or the program <code>OKO_CLI</code> names) so Oko imports the corrected rows; its output goes to stderr.</li><li>Global <code>--data-dir</code> selects the Lake to reconcile.</li></ul>
+<h2 id="output-and-state">Output and state effect<a class="heading-anchor" href="#output-and-state" aria-label="Link to Output and state effect">#</a></h2>
+<p>Prints one JSON document: <code>runtime</code>, the staging <code>replay</code> summary, <code>applied</code>, and <code>partitions</code> with <code>unchanged</code> (a count) and three lists, each entry naming the <code>partition</code> file, its <code>sessions</code> and <code>rowsRecorded</code>:</p>
+<ul><li><code>changed</code>: the replay projects the source differently. <code>rowsSuperseded</code> recorded rows no longer follow from the original; <code>rowsReplayed</code> rows do that were never recorded. A corrected sender shows as one of each.</li><li><code>unprovable</code>: no retained original on this machine reproduces the partition (the source file is gone or lives under a root this machine does not list). Its rows stay exactly as recorded and are never reclassified from their text.</li><li><code>refused</code>: the partition holds rows recorded on another machine (<code>machines</code>), which this machine's original cannot stand for. It is never rewritten.</li></ul>
+<p>The whole run holds the Lake's writer lease, so the stream cannot append between the comparison and the replacement. <code>--apply</code> renames each replayed date file over its predecessor (a date the replay no longer writes is removed), gives every source of the runtime the replay's cursor so the stream resumes after what the partition holds, removes the runtime's Parquet mirror (<code>parquetMirrorRemoved</code>; <code>compact</code> writes it again) and rebuilds the Oko projection from every partition (<code>projection</code>). An interrupted apply is completed by running it again: each file is replaced whole, so no row is written twice. The staging root is removed in every case.</p>
+<p>Exit 1 when a partition is unprovable or refused or the replay could not read an original; exit 0 when every partition was proved against its original.</p>
+<h2 id="refusals">Exact refusals<a class="heading-anchor" href="#refusals" aria-label="Link to Exact refusals">#</a></h2>
+<ul><li>Missing runtime: <code>reconcile requires --source &lt;runtime&gt;</code>.</li><li>Hook telemetry: <code>reconcile replays transcript originals; hooks segments are immutable and content-addressed, so no projection of them can be superseded</code>.</li><li><code>--reindex</code> alone: <code>reconcile --reindex needs --apply: only an applied correction changes what Oko imports</code>.</li><li>An unsupported <code>--source</code> is refused with the runtimes of the adapter registry, as <code>rebuild</code> refuses it; a positional argument as <code>reconcile accepts flags only</code>.</li><li>A writer already holding the Lake: the lease refusal names it, and nothing is read or written.</li><li><code>--apply</code> when the replay was partial or a partition is refused: nothing is replaced, and the report carries <code>applyRefused</code> with the reason; the files the replay could not read are named on stderr.</li><li>A canonical partition line that is not an event: <code>canonical partition &lt;path&gt; holds a line that is not an event (&lt;cause&gt;): &lt;line&gt;</code>; nothing is replaced.</li><li>Without <code>oko-cli</code>: <code>oko-cli is not on PATH and OKO_CLI names none; the corrected projection is written, and `transcript-lake projection refresh --target oko` hands it to Oko</code>.</li></ul>
+<p>All long flags are exact and single-use. Global <code>--data-dir</code> may appear anywhere in the invocation, must appear once, and selects an absolute root.</p>
+<p><a href="/docs/cli/">Back to the complete CLI command tree.</a></p>
+</div>
+        <nav class="article-pagination" aria-label="Adjacent documentation"><a href="/docs/cli/rebuild/"><small>Previous</small><span>← rebuild</span></a><a class="next" href="/docs/cli/sessions/"><small>Next</small><span>sessions →</span></a></nav>
+      </article>
+      <aside class="page-toc" aria-label="On this page"><strong>On this page</strong><a href="#invocation" class="toc-level-2">Invocation</a><a href="#purpose" class="toc-level-2">Purpose</a><a href="#inputs-and-options" class="toc-level-2">Inputs and options</a><a href="#output-and-state" class="toc-level-2">Output and state effect</a><a href="#refusals" class="toc-level-2">Exact refusals</a></aside>
+    </div>
+  </main>
+</div>
+<footer class="docs-footer"><span>Transcript Lake documentation</span><a href="https://github.com/wisent-ai/transcript-lake">GitHub ↗</a></footer>
+</div>
+  <script src="/script.js" defer></script>
+</body>
+</html>
