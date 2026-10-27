@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>transcript-lake doctor — Transcript Lake</title>
-  <meta name="description" content="Check state, cursors, source discovery, DuckDB, and Oko availability.">
+  <meta name="description" content="Check the declared masking policy, state, cursors, source discovery, DuckDB, and Oko availability.">
   <meta name="theme-color" content="#07121a">
   <meta property="og:title" content="transcript-lake doctor — Transcript Lake">
-  <meta property="og:description" content="Check state, cursors, source discovery, DuckDB, and Oko availability.">
+  <meta property="og:description" content="Check the declared masking policy, state, cursors, source discovery, DuckDB, and Oko availability.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://transcript-lake.wisent.com/docs/cli/doctor/">
   <link rel="canonical" href="https://transcript-lake.wisent.com/docs/cli/doctor/">
@@ -34,16 +34,18 @@
   <main class="docs-main" id="main">
     <div class="article-layout">
       <article class="doc-article">
-        <header class="article-header"><p class="eyebrow">Documentation / CLI</p><h1>transcript-lake doctor</h1><p>Check state, cursors, source discovery, DuckDB, and Oko availability.</p></header>
+        <header class="article-header"><p class="eyebrow">Documentation / CLI</p><h1>transcript-lake doctor</h1><p>Check the declared masking policy, state, cursors, source discovery, DuckDB, and Oko availability.</p></header>
         <div class="article-content">
 <h2 id="invocation">Invocation<a class="heading-anchor" href="#invocation" aria-label="Link to Invocation">#</a></h2>
 <div class="code-block"><div class="code-label">sh</div><pre><code>transcript-lake [--data-dir &lt;path&gt;] doctor [--json]</code></pre></div>
 <h2 id="purpose">Purpose<a class="heading-anchor" href="#purpose" aria-label="Link to Purpose">#</a></h2>
-<p>Check state, cursors, source discovery, DuckDB, and Oko availability.</p>
+<p>Check the declared masking policy, state, cursors, source discovery, DuckDB, and Oko availability.</p>
 <h2 id="inputs-and-options">Inputs and options<a class="heading-anchor" href="#inputs-and-options" aria-label="Link to Inputs and options">#</a></h2>
 <ul><li>No positional input is required or accepted.</li><li><code>--json</code> emits <code>dataDir</code>, <code>healthy</code>, and structured checks.</li></ul>
 <h2 id="output-and-state">Output and state effect<a class="heading-anchor" href="#output-and-state" aria-label="Link to Output and state effect">#</a></h2>
-<p>Read-only. The human form prints <code>OK</code>, <code>WARNING</code>, or <code>ERROR</code> for the state root, cursors, sources, source integrity, DuckDB, and Oko CLI. Missing optional dependencies and an absent zero-state are warnings or healthy states; a check marked error makes the command non-zero.</p>
+<p>Read-only. The human form prints <code>OK</code>, <code>WARNING</code>, or <code>ERROR</code> for the masking policy, state root, cursors, sources, source integrity, DuckDB, and Oko CLI. Missing optional dependencies and an absent zero-state are warnings or healthy states; a check marked error makes the command non-zero.</p>
+<p>The <code>masking-policy</code> check reads and validates the declaration ingestion uses, with the same masker: the file named by <code>TRANSCRIPT_LAKE_SECRET_FORMATS</code>, or the declaration shipped with Transcript Lake when the setting is unset or empty. An unreadable declaration (<code>cannot be read</code>), a file that is not JSON at all (<code>not a secret-format declaration</code>), a missing class, an unknown field or an invalid pattern (<code>invalid assignment pattern</code> and the like) is an error retaining the actual cause and the declared file path. Name a valid declaration as described in <a href="/docs/masking-guarantees/">Masking guarantees</a>, or unset the variable to use the shipped one; the diagnostic never substitutes null classes for a declaration it could not read.</p>
+<p>A valid policy reports <code>declared secret formats are readable and valid; ingestion was not run</code>. This proves configuration can be read, not that source adoption, streaming or catalogue synchronization succeeded. Doctor does not ingest transcripts, publish events, initialize the Lake or change its selected source.</p>
 <h2 id="refusals">Exact refusals<a class="heading-anchor" href="#refusals" aria-label="Link to Exact refusals">#</a></h2>
 <ul><li>Any positional argument is refused as <code>doctor accepts flags only</code>.</li><li>An unrecognized <code>--wat</code> is refused as <code>unknown doctor flag: --wat</code>.</li><li>Repeating <code>--json</code> is refused as <code>doctor received duplicate --json</code>.</li></ul>
 <p>All long flags are exact and single-use. A value flag never consumes another <code>--flag</code>. Global <code>--data-dir</code> may appear anywhere in the invocation, must appear once, and selects an absolute root.</p>

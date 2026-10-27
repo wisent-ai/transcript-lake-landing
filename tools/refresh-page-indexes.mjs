@@ -10,7 +10,10 @@ function required(html, pattern, field, source) {
 }
 
 export function refresh(root, { decode, encode, escape }) {
-  const plain = (html) => decode(html.replace(/<[^>]+>/g, " ")).replace(/\s+/g, " ").trim();
+  // Discovery text is what the article says: the pagination and any other
+  // navigation inside it name neighbouring pages, not this one.
+  const plain = (html) =>
+    decode(html.replace(/<nav\b[^>]*>[\s\S]*?<\/nav>/g, " ").replace(/<[^>]+>/g, " ")).replace(/\s+/g, " ").trim();
   const manifest = JSON.parse(readFileSync(join(root, "docs-manifest.json"), "utf8"));
   let home = readFileSync(join(root, "docs/index.html"), "utf8");
   let cli = readFileSync(join(root, "docs/cli/index.html"), "utf8");
